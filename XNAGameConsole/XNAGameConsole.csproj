@@ -68,6 +68,7 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml">
       <Private>False</Private>
@@ -83,14 +84,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
+    <Compile Include="KeyboardCapture\CharacterEventArgs.cs" />
+    <Compile Include="KeyboardCapture\EventInput.cs" />
+    <Compile Include="KeyboardCapture\KeyEventArgs.cs" />
     <Compile Include="PlayerCommandProcesser.cs" />
-    <Compile Include="DebuggingCommandProcesser.cs" />
     <Compile Include="GameConsole.cs" />
-    <Compile Include="Hooks\HookManager.Callbacks.cs" />
-    <Compile Include="Hooks\HookManager.cs" />
-    <Compile Include="Hooks\HookManager.Structures.cs" />
-    <Compile Include="Hooks\HookManager.Windows.cs" />
-    <Compile Include="Hooks\MouseEventExtArgs.cs" />
     <Compile Include="ICommandProcesser.cs" />
     <Compile Include="InputProcessor.cs" />
     <Compile Include="PastCommand.cs" />

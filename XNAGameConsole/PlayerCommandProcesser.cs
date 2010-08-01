@@ -33,7 +33,7 @@ namespace XNAGameConsole
             return buffer.Substring(0, firstSpace < 0 ? buffer.Length : firstSpace);
         }
 
-        static IEnumerable<string> GetArguments(string buffer)
+        static string[] GetArguments(string buffer)
         {
             var firstSpace = buffer.IndexOf(' ');
             if (firstSpace < 0)
@@ -43,7 +43,7 @@ namespace XNAGameConsole
             
             var args = buffer.Substring(firstSpace, buffer.Length - firstSpace);
             var allArgs = args.Split(' ');
-            return allArgs.Where(a => a != "");
+            return allArgs.Where(a => a != "").ToArray();
         }
     }
 }

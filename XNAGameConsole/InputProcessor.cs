@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using XNAGameConsole.Hooks;
+using XNAGameConsole.KeyboardCapture;
 
 namespace XNAGameConsole
 {
@@ -11,12 +11,15 @@ namespace XNAGameConsole
     {
         public event EventHandler Open = delegate { };
         public event EventHandler Close = delegate { };
+        public event EventHandler PlayerCommand = delegate { };
+        public event EventHandler ConsoleCommand = delegate { };
 
         public List<PastCommand> History { get; set; }
         public string Buffer { get; set; }
 
         private const int BACKSPACE = 8;
         private const int ENTER = 13;
+        private const int TAB = 9;
         private char toggleKey;
         private bool isActive;
         private ICommandProcesser commandProcesser;
@@ -27,12 +30,12 @@ namespace XNAGameConsole
             isActive = false;
             this.toggleKey = toggleKey;
             History = new List<PastCommand>();
-            HookManager.KeyPress += HookManager_KeyPress;
+            EventInput.CharEntered += EventInput_CharEntered;
         }
 
-        void HookManager_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        void EventInput_CharEntered(object sender, CharacterEventArgs e)
         {
-            if (e.KeyChar == toggleKey)
+            if (e.Character == toggleKey)
             {
                 isActive = !isActive;
                 if (isActive)
@@ -43,7 +46,6 @@ namespace XNAGameConsole
                 {
                     Close(this, EventArgs.Empty);
                 }
-                e.Handled = true;
                 return;
             }
 
@@ -51,7 +53,7 @@ namespace XNAGameConsole
             {
                 return;
             }
-            switch ((int)e.KeyChar)
+            switch ((int)e.Character)
             {
                 case ENTER: ExecuteBuffer(); break;
                 case BACKSPACE:
@@ -60,11 +62,11 @@ namespace XNAGameConsole
                         Buffer = Buffer.Substring(0, Buffer.Length - 1);
                     }
                     break;
+                case TAB: AutoComplete(); break;
                 default:
-                    Buffer += e.KeyChar;
+                    Buffer += e.Character;
                     break;
             }
-            e.Handled = true;
         }
 
         void ExecuteBuffer()
@@ -72,6 +74,11 @@ namespace XNAGameConsole
             var status = commandProcesser.Process(Buffer);
             History.Add(status);
             Buffer = "";
+        }
+
+        void AutoComplete()
+        {
+            
         }
     }
 }

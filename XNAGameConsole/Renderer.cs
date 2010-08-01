@@ -22,18 +22,18 @@ namespace XNAGameConsole
         private readonly SpriteFont consoleFont;
         private readonly int commandSpacing;
         private Texture2D consoleBackground;
-        private int width, height, margin = 15, padding = 5;
+        private int width, height = 300, margin = 15, padding = 5;
         private State CurrentState;
         private Color fontColor;
         private Vector2 OpenedPosition, ClosedPosition, Position;
         private DateTime stateChangeTime;
         private float animationSpeed;
-
-        Vector2 FirstCommandPosition
+        private Vector2 firstCommandPositionOffset;
+        private Vector2 firstCommandPosition
         {
             get
             {
-                return new Vector2(Position.X + padding, Position.Y + padding);
+                return new Vector2(Position.X + padding, Position.Y + padding) + firstCommandPositionOffset;
             }
         }
 
@@ -43,10 +43,8 @@ namespace XNAGameConsole
             animationSpeed = 0.5f;
             CurrentState = State.Closed;
             width = device.Viewport.Width;
-            height = 150;
-            ClosedPosition = new Vector2(margin,-height);
-            OpenedPosition = new Vector2(margin,margin);
-            Position = ClosedPosition;
+            Position = ClosedPosition = new Vector2(margin,-height);
+            OpenedPosition = new Vector2(margin,0);
             this.spriteBatch = spriteBatch;
             this.inputProcessor = inputProcessor;
             commandSpacing = consoleFont.LineSpacing;
@@ -54,6 +52,7 @@ namespace XNAGameConsole
             consoleBackground = new Texture2D(device,1,1,1,TextureUsage.None,SurfaceFormat.Color);
             consoleBackground.SetData(new [] { new Color(0, 0, 0, 125) });
             fontColor = Color.White;
+            firstCommandPositionOffset = Vector2.Zero;
         }
 
         public void Update(GameTime gameTime)
@@ -80,21 +79,27 @@ namespace XNAGameConsole
         {
             spriteBatch.Draw(consoleBackground, new Rectangle((int)Position.X, (int)Position.Y, width - margin * 2, height), Color.White);
             var currCommandPosition = DrawExistingCommands();
-            DrawCommand(inputProcessor.Buffer, currCommandPosition, fontColor);
+            DrawCommand("> " + inputProcessor.Buffer, currCommandPosition, fontColor);
         }
 
         void DrawCommand(string command, Vector2 position, Color color)
         {
-            spriteBatch.DrawString(consoleFont, String.Format("> {0}", command), new Vector2(position.X + padding, position.Y), color);
+            ValidateFirstCommandPosition(position.Y);
+            spriteBatch.DrawString(consoleFont, command, new Vector2(position.X + padding, position.Y), color);
         }         
 
         Vector2 DrawExistingCommands()
         {
-            var currPosition = FirstCommandPosition;
+            var currPosition = firstCommandPosition;
             foreach (var command in inputProcessor.History)
             {
-                DrawCommand(command.ToString(), currPosition, fontColor);
+                DrawCommand("> " + command, currPosition, fontColor);
                 currPosition.Y += commandSpacing;
+                if (!command.Status)
+                {
+                    DrawCommand("ERROR", currPosition,fontColor);
+                    currPosition.Y += commandSpacing;
+                }
             }
             return currPosition;
         }
@@ -109,6 +114,14 @@ namespace XNAGameConsole
         {
             stateChangeTime = DateTime.Now;
             CurrentState = State.Closing;
+        }
+
+        void ValidateFirstCommandPosition(float nextCommandY)
+        {
+            if (nextCommandY + commandSpacing > OpenedPosition.Y + height)
+            {
+                firstCommandPositionOffset.Y -= commandSpacing;
+            }
         }
     }
 }

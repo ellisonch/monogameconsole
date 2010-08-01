@@ -30,8 +30,6 @@ namespace XNATextInput
             Content.RootDirectory = "Content";
         }
 
-
-
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -45,6 +43,7 @@ namespace XNATextInput
             var consoleCommands = new []
                                       {
                                           new Command("addPlayer", a => Console.WriteLine("Adding Player: " + a.First())), 
+                                          new Command("move", a => player.Position = new Vector2(float.Parse(a[0]),float.Parse(a[1]))), 
                                       };
             console = new GameConsole(this, spriteBatch, '`', consoleCommands);
             Components.Add(console);
@@ -97,7 +96,7 @@ namespace XNATextInput
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkGreen);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             player.Draw(gameTime);
             spriteBatch.End();

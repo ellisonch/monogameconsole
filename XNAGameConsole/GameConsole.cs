@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XNAGameConsole.Hooks;
-using System.Reflection;
+using XNAGameConsole.KeyboardCapture;
 
 namespace XNAGameConsole
 {
@@ -13,12 +12,13 @@ namespace XNAGameConsole
     {
         public char ActivateKey { get; set; }
 
-        private SpriteBatch spriteBatch;
-        private InputProcessor inputProcesser;
-        private Renderer renderer;
+        private readonly SpriteBatch spriteBatch;
+        private readonly InputProcessor inputProcesser;
+        private readonly Renderer renderer;
 
         public GameConsole(Game game, SpriteBatch spriteBatch, char activateKey, IEnumerable<Command> commands) : base(game)
         {
+            EventInput.Initialize(game.Window);
             this.spriteBatch = spriteBatch;
             inputProcesser = new InputProcessor(activateKey, new PlayerCommandProcesser(commands));
             inputProcesser.Open += (s, e) => renderer.Open();

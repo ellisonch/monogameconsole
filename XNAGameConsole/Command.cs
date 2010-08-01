@@ -8,11 +8,11 @@ namespace XNAGameConsole
     public class Command
     {
         public string Name { get; set; }
-        public Action<IEnumerable<string>> Action { get; set; }
         public string Description { get; set; }
+        public Action<string[]> Action { get; set; }
 
-        public Command(string name, Action<IEnumerable<string>> action) : this(name,action,"") { }
-        public Command(string name, Action<IEnumerable<string>> action, string description)
+        public Command(string name, Action<string[]> action) : this(name,action,"") { }
+        public Command(string name, Action<string[]> action, string description)
         {
             Name = name;
             Action = action;
