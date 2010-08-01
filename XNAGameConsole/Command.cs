@@ -5,14 +5,14 @@ using System.Text;
 
 namespace XNAGameConsole
 {
-    public class CustomCommand
+    public class Command
     {
         public string Name { get; set; }
         public Action<IEnumerable<string>> Action { get; set; }
         public string Description { get; set; }
 
-        public CustomCommand(string name, Action<IEnumerable<string>> action) : this(name,action,"") { }
-        public CustomCommand(string name, Action<IEnumerable<string>> action, string description)
+        public Command(string name, Action<IEnumerable<string>> action) : this(name,action,"") { }
+        public Command(string name, Action<IEnumerable<string>> action, string description)
         {
             Name = name;
             Action = action;

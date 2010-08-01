@@ -44,7 +44,7 @@ namespace XNATextInput
             Services.AddService(typeof(SpriteBatch), spriteBatch);
             var consoleCommands = new []
                                       {
-                                          new CustomCommand("addPlayer", a => Console.WriteLine("Adding Player: " + a.First())), 
+                                          new Command("addPlayer", a => Console.WriteLine("Adding Player: " + a.First())), 
                                       };
             console = new GameConsole(this, spriteBatch, '`', consoleCommands);
             Components.Add(console);

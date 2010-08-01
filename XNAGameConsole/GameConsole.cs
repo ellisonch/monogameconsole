@@ -17,10 +17,10 @@ namespace XNAGameConsole
         private InputProcessor inputProcesser;
         private Renderer renderer;
 
-        public GameConsole(Game game, SpriteBatch spriteBatch, char activateKey, IEnumerable<CustomCommand> commands) : base(game)
+        public GameConsole(Game game, SpriteBatch spriteBatch, char activateKey, IEnumerable<Command> commands) : base(game)
         {
             this.spriteBatch = spriteBatch;
-            inputProcesser = new InputProcessor(activateKey, new CustomCommandProcesser(commands));
+            inputProcesser = new InputProcessor(activateKey, new PlayerCommandProcesser(commands));
             inputProcesser.Open += (s, e) => renderer.Open();
             inputProcesser.Close += (s, e) => renderer.Close();
 

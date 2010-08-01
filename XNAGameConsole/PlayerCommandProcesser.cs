@@ -5,11 +5,11 @@ using System.Text;
 
 namespace XNAGameConsole
 {
-    class CustomCommandProcesser:ICommandProcesser
+    class PlayerCommandProcesser:ICommandProcesser
     {
-        private IEnumerable<CustomCommand> commands;
+        private IEnumerable<Command> commands;
 
-        public CustomCommandProcesser(IEnumerable<CustomCommand> commands)
+        public PlayerCommandProcesser(IEnumerable<Command> commands)
         {
             this.commands = commands;
         }
@@ -17,7 +17,7 @@ namespace XNAGameConsole
         public PastCommand Process(string buffer)
         {
             string commandName = GetCommandName(buffer);
-            CustomCommand command = commands.Where(c => c.Name == commandName).FirstOrDefault();
+            Command command = commands.Where(c => c.Name == commandName).FirstOrDefault();
             var arguments = GetArguments(buffer);
             if (command == null)
             {
