@@ -22,9 +22,9 @@ namespace XNAGameConsole
         private const int TAB = 9;
         private char toggleKey;
         private bool isActive;
-        private ICommandProcesser commandProcesser;
+        private PlayerCommandProcesser commandProcesser;
 
-        public InputProcessor(char toggleKey, ICommandProcesser commandProcesser)
+        public InputProcessor(char toggleKey, PlayerCommandProcesser commandProcesser)
         {
             this.commandProcesser = commandProcesser;
             isActive = false;
@@ -78,7 +78,20 @@ namespace XNAGameConsole
 
         void AutoComplete()
         {
-            
+            var match = GetMatchingCommand();
+            if (match == null)
+            {
+                return;
+            }
+            var restOfTheCommand = match.Name.Substring(Buffer.Length);
+            Buffer += restOfTheCommand + " ";
+
+        }
+
+        Command GetMatchingCommand()
+        {
+            var matchingCommands = commandProcesser.Commands.Where(c => c.Name.IndexOf(Buffer, 0) == 0);
+            return matchingCommands.Count() < 1 ? null : matchingCommands.First();
         }
     }
 }

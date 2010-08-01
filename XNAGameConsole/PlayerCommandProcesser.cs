@@ -7,17 +7,17 @@ namespace XNAGameConsole
 {
     class PlayerCommandProcesser:ICommandProcesser
     {
-        private IEnumerable<Command> commands;
+        public IEnumerable<Command> Commands { get; set; }
 
         public PlayerCommandProcesser(IEnumerable<Command> commands)
         {
-            this.commands = commands;
+            Commands = commands;
         }
 
         public PastCommand Process(string buffer)
         {
             string commandName = GetCommandName(buffer);
-            Command command = commands.Where(c => c.Name == commandName).FirstOrDefault();
+            Command command = Commands.Where(c => c.Name == commandName).FirstOrDefault();
             var arguments = GetArguments(buffer);
             if (command == null)
             {
