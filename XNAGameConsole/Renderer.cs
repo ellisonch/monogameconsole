@@ -47,6 +47,8 @@ namespace XNAGameConsole
 
         private Texture2D roundedEdge;
         private Color consoleColor;
+        private float oneCharacterWidth;
+        private int maxCharactersPerLine;
 
         public Renderer(Game game, SpriteBatch spriteBatch, InputProcessor inputProcessor, SpriteFont consoleFont)
         {
@@ -65,6 +67,8 @@ namespace XNAGameConsole
             consoleBackground.SetData(new [] { consoleColor });
             fontColor = Color.White;
             firstCommandPositionOffset = Vector2.Zero;
+            oneCharacterWidth = consoleFont.MeasureString("x").X;
+            maxCharactersPerLine = (int)((ConsoleWidth - padding) / oneCharacterWidth) - 1;
         }
 
         public void Update(GameTime gameTime)
@@ -91,12 +95,13 @@ namespace XNAGameConsole
         {
             if (CurrentState == State.Closed) //Do not draw if the console is closed
             {
-                //return;
+                return;
             }
             spriteBatch.Draw(consoleBackground, new Rectangle((int)Position.X, (int)Position.Y, ConsoleWidth, height), Color.White);
             DrawRoundedEdges();
             var currCommandPosition = DrawExistingCommands();
-            DrawCommand(inputProcessor.Buffer.ToString(), currCommandPosition, fontColor);
+            var bufferPosition = DrawCommand(inputProcessor.Buffer.ToString(), currCommandPosition, fontColor);
+            DrawCursor(bufferPosition, gameTime);
         }
 
         void DrawRoundedEdges()
@@ -109,11 +114,17 @@ namespace XNAGameConsole
             spriteBatch.Draw(consoleBackground, new Rectangle((int)Position.X + roundedEdge.Width, (int)Position.Y + height, ConsoleWidth - (roundedEdge.Width*2), roundedEdge.Height), Color.White);
         }
 
+        void DrawCursor(Vector2 position, GameTime gameTime)
+        {
+            position.Y -= commandSpacing;
+            var split = SplitCommand(inputProcessor.Buffer.ToString(), maxCharactersPerLine).Last();
+            position.X += consoleFont.MeasureString(split).X;
+            spriteBatch.DrawString(consoleFont, (int)(gameTime.TotalRealTime.TotalSeconds/0.4) % 2 == 0 ? "_" : "", position, fontColor);
+        }
+
         Vector2 DrawCommand(string command, Vector2 position, Color color)
         {
             ValidateFirstCommandPosition(position.Y);
-            var oneCharWidth = consoleFont.MeasureString(command).X / command.Length;
-            var maxCharactersPerLine = (int)((ConsoleWidth - padding) / oneCharWidth) - 1;
             var splitLines = command.Length > maxCharactersPerLine ? SplitCommand(command, maxCharactersPerLine) : new []{command};
             position.X += padding;
             foreach (var line in splitLines)
