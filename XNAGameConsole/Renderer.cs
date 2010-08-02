@@ -37,20 +37,32 @@ namespace XNAGameConsole
             }
         }
 
-
-        public Renderer(GraphicsDevice device, SpriteBatch spriteBatch, InputProcessor inputProcessor, SpriteFont consoleFont)
+        int ConsoleWidth
         {
-            animationSpeed = 0.5f;
+            get
+            {
+                return width - margin*2;
+            }
+        }
+
+        private Texture2D roundedEdge;
+        private Color consoleColor;
+
+        public Renderer(Game game, SpriteBatch spriteBatch, InputProcessor inputProcessor, SpriteFont consoleFont)
+        {
+            roundedEdge = game.Content.Load<Texture2D>("roundedCorner");
+            animationSpeed = 1f;
             CurrentState = State.Closed;
-            width = device.Viewport.Width;
-            Position = ClosedPosition = new Vector2(margin,-height);
+            width = game.GraphicsDevice.Viewport.Width;
+            Position = ClosedPosition = new Vector2(margin,-height - roundedEdge.Height);
             OpenedPosition = new Vector2(margin,0);
             this.spriteBatch = spriteBatch;
             this.inputProcessor = inputProcessor;
             commandSpacing = consoleFont.LineSpacing;
             this.consoleFont = consoleFont;
-            consoleBackground = new Texture2D(device,1,1,1,TextureUsage.None,SurfaceFormat.Color);
-            consoleBackground.SetData(new [] { new Color(0, 0, 0, 125) });
+            consoleColor = new Color(0,0,0,125);
+            consoleBackground = new Texture2D(game.GraphicsDevice,1,1,1,TextureUsage.None,SurfaceFormat.Color);
+            consoleBackground.SetData(new [] { consoleColor });
             fontColor = Color.White;
             firstCommandPositionOffset = Vector2.Zero;
         }
@@ -79,27 +91,59 @@ namespace XNAGameConsole
         {
             if (CurrentState == State.Closed) //Do not draw if the console is closed
             {
-                return;
+                //return;
             }
-            spriteBatch.Draw(consoleBackground, new Rectangle((int)Position.X, (int)Position.Y, width - margin * 2, height), Color.White);
+            spriteBatch.Draw(consoleBackground, new Rectangle((int)Position.X, (int)Position.Y, ConsoleWidth, height), Color.White);
+            DrawRoundedEdges();
             var currCommandPosition = DrawExistingCommands();
             DrawCommand(inputProcessor.Buffer.ToString(), currCommandPosition, fontColor);
         }
 
-        void DrawCommand(string command, Vector2 position, Color color)
+        void DrawRoundedEdges()
+        {
+            //Bottom-left edge
+            spriteBatch.Draw(roundedEdge, new Vector2(Position.X, Position.Y + height), null, consoleColor, 0, Vector2.Zero, 1, SpriteEffects.None, 1); 
+            //Bottom-right edge 
+            spriteBatch.Draw(roundedEdge, new Vector2(Position.X + ConsoleWidth - roundedEdge.Width, Position.Y + height), null, consoleColor, 0, Vector2.Zero, 1, SpriteEffects.FlipHorizontally, 1);
+            //connecting bottom-rectangle
+            spriteBatch.Draw(consoleBackground, new Rectangle((int)Position.X + roundedEdge.Width, (int)Position.Y + height, ConsoleWidth - (roundedEdge.Width*2), roundedEdge.Height), Color.White);
+        }
+
+        Vector2 DrawCommand(string command, Vector2 position, Color color)
         {
             ValidateFirstCommandPosition(position.Y);
-            Console.WriteLine("{0} {1}",command,consoleFont.MeasureString(command));
-            spriteBatch.DrawString(consoleFont, command, new Vector2(position.X + padding, position.Y), color);
+            var oneCharWidth = consoleFont.MeasureString(command).X / command.Length;
+            var maxCharactersPerLine = (int)((ConsoleWidth - padding) / oneCharWidth) - 1;
+            var splitLines = command.Length > maxCharactersPerLine ? SplitCommand(command, maxCharactersPerLine) : new []{command};
+            position.X += padding;
+            foreach (var line in splitLines)
+            {
+                spriteBatch.DrawString(consoleFont, line, position, color);
+                position.Y += commandSpacing;
+            }
+            return position;
         }         
+
+        IEnumerable<string> SplitCommand(string command, int max)
+        {
+            var lines = new List<string>();
+            while (command.Length > max)
+            {
+                var splitCommand = command.Substring(0, max);
+                lines.Add(splitCommand);
+                command = command.Substring(max, command.Length - max);
+            }
+            lines.Add(command);
+
+            return lines;
+        }
 
         Vector2 DrawExistingCommands()
         {
             var currPosition = firstCommandPosition;
             foreach (var command in inputProcessor.Out)
             {
-                DrawCommand(command.ToString(), currPosition, fontColor);
-                currPosition.Y += commandSpacing;
+                currPosition.Y = DrawCommand(command.ToString(), currPosition, fontColor).Y;
             }
             return currPosition;
         }

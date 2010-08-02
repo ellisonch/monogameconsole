@@ -26,7 +26,7 @@ namespace XNAGameConsole
             inputProcesser.Close += (s, e) => renderer.Close();
 
             ActivateKey = activateKey;
-            renderer = new Renderer(game.GraphicsDevice, spriteBatch, inputProcesser, Game.Content.Load<SpriteFont>("ConsoleFont"));
+            renderer = new Renderer(game, spriteBatch, inputProcesser, Game.Content.Load<SpriteFont>("ConsoleFont"));
         }
 
         public override void Draw(GameTime gameTime)
