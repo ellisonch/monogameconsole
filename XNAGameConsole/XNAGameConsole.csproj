@@ -84,10 +84,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
+    <Compile Include="CommandHistory.cs" />
     <Compile Include="KeyboardCapture\CharacterEventArgs.cs" />
     <Compile Include="KeyboardCapture\EventInput.cs" />
     <Compile Include="KeyboardCapture\KeyEventArgs.cs" />
-    <Compile Include="PlayerCommandProcesser.cs" />
+    <Compile Include="OutputLine.cs" />
+    <Compile Include="CommandProcesser.cs" />
     <Compile Include="GameConsole.cs" />
     <Compile Include="ICommandProcesser.cs" />
     <Compile Include="InputProcessor.cs" />

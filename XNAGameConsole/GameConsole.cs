@@ -16,14 +16,14 @@ namespace XNAGameConsole
         private readonly InputProcessor inputProcesser;
         private readonly Renderer renderer;
 
-        public GameConsole(Game game, SpriteBatch spriteBatch, char activateKey, IEnumerable<Command> commands) : base(game)
+        public GameConsole(Game game, SpriteBatch spriteBatch, IEnumerable<Command> commands) : this(game,spriteBatch,commands,'`'){}
+        public GameConsole(Game game, SpriteBatch spriteBatch, IEnumerable<Command> commands, char activateKey) : base(game)
         {
             EventInput.Initialize(game.Window);
             this.spriteBatch = spriteBatch;
-            inputProcesser = new InputProcessor(activateKey, new PlayerCommandProcesser(commands));
+            inputProcesser = new InputProcessor(activateKey, new CommandProcesser(commands));
             inputProcesser.Open += (s, e) => renderer.Open();
             inputProcesser.Close += (s, e) => renderer.Close();
-
 
             ActivateKey = activateKey;
             renderer = new Renderer(game.GraphicsDevice, spriteBatch, inputProcesser, Game.Content.Load<SpriteFont>("ConsoleFont"));

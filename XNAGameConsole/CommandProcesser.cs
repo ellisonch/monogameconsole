@@ -5,26 +5,34 @@ using System.Text;
 
 namespace XNAGameConsole
 {
-    class PlayerCommandProcesser:ICommandProcesser
+    class CommandProcesser//:ICommandProcesser
     {
         public IEnumerable<Command> Commands { get; set; }
 
-        public PlayerCommandProcesser(IEnumerable<Command> commands)
+        public CommandProcesser(IEnumerable<Command> commands)
         {
             Commands = commands;
         }
 
-        public PastCommand Process(string buffer)
+        public string Process(string buffer)
         {
             string commandName = GetCommandName(buffer);
             Command command = Commands.Where(c => c.Name == commandName).FirstOrDefault();
             var arguments = GetArguments(buffer);
             if (command == null)
             {
-                return new PastCommand(commandName, arguments,false);
+                return "ERROR: Command not found";
             }
-            command.Action(arguments);
-            return new PastCommand(commandName, arguments, true);
+            string commandOutput;
+            try
+            {
+            commandOutput = command.Action(arguments);
+            }
+            catch (Exception ex)
+            {
+                commandOutput = "ERROR: " + ex.Message;
+            }
+            return commandOutput;
         }
 
         static string GetCommandName(string buffer)

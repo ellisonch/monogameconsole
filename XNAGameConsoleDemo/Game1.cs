@@ -42,10 +42,15 @@ namespace XNATextInput
             Services.AddService(typeof(SpriteBatch), spriteBatch);
             var consoleCommands = new []
                                       {
-                                          new Command("addPlayer", a => Console.WriteLine("Adding Player: " + a.First())), 
-                                          new Command("move", a => player.Position = new Vector2(float.Parse(a[0]),float.Parse(a[1]))), 
+                                          new Command("addPlayer", a => "Adding Player: " + a.First()), 
+                                          new Command("move", a =>
+                                                                  {
+                                                                      player.Position = new Vector2(float.Parse(a[0]),
+                                                                                                    float.Parse(a[1]));
+                                                                      return "Moved player";
+                                                                  }), 
                                       };
-            console = new GameConsole(this, spriteBatch, '`', consoleCommands);
+            console = new GameConsole(this, spriteBatch, consoleCommands);
             Components.Add(console);
             player = new Player(this);
             base.Initialize();

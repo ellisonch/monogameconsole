@@ -32,10 +32,5 @@ namespace XNATextInput
         {
             spriteBatch.Draw(PlayerTexture, Position,null,Color.White,Angle,new Vector2(PlayerTexture.Width / 2, PlayerTexture.Height/2),1,SpriteEffects.None,1);
         }
-
-        public void Write()
-        {
-            Console.WriteLine("ASDASDASDASDASD");
-        }
     }
 }

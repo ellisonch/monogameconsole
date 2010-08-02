@@ -77,29 +77,29 @@ namespace XNAGameConsole
 
         public void Draw(GameTime gameTime)
         {
+            if (CurrentState == State.Closed) //Do not draw if the console is closed
+            {
+                return;
+            }
             spriteBatch.Draw(consoleBackground, new Rectangle((int)Position.X, (int)Position.Y, width - margin * 2, height), Color.White);
             var currCommandPosition = DrawExistingCommands();
-            DrawCommand("> " + inputProcessor.Buffer, currCommandPosition, fontColor);
+            DrawCommand(inputProcessor.Buffer.ToString(), currCommandPosition, fontColor);
         }
 
         void DrawCommand(string command, Vector2 position, Color color)
         {
             ValidateFirstCommandPosition(position.Y);
+            Console.WriteLine("{0} {1}",command,consoleFont.MeasureString(command));
             spriteBatch.DrawString(consoleFont, command, new Vector2(position.X + padding, position.Y), color);
         }         
 
         Vector2 DrawExistingCommands()
         {
             var currPosition = firstCommandPosition;
-            foreach (var command in inputProcessor.History)
+            foreach (var command in inputProcessor.Out)
             {
-                DrawCommand("> " + command, currPosition, fontColor);
+                DrawCommand(command.ToString(), currPosition, fontColor);
                 currPosition.Y += commandSpacing;
-                if (!command.Status)
-                {
-                    DrawCommand("ERROR", currPosition,fontColor);
-                    currPosition.Y += commandSpacing;
-                }
             }
             return currPosition;
         }
