@@ -16,12 +16,12 @@ namespace XNAGameConsole
 
         public string Next()
         {
-            return Index + 1 > Count - 1 ? this[Index] : this[++Index];
+            return Count == 0 ? "" : Index + 1 > Count - 1 ? this[Index] : this[++Index];
         }
 
         public string Previous()
         {
-            return Index - 1 < 0 ? this[0] : this[--Index];
+            return Count == 0 ? "" : Index - 1 < 0 ? this[0] : this[--Index];
         }
 
         public new void Add(string command)

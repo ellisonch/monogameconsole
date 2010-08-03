@@ -92,7 +92,6 @@
     <Compile Include="OutputLine.cs" />
     <Compile Include="CommandProcesser.cs" />
     <Compile Include="GameConsole.cs" />
-    <Compile Include="ICommandProcesser.cs" />
     <Compile Include="InputProcessor.cs" />
     <Compile Include="PastCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,11 +18,12 @@ namespace XNAGameConsole
                 return GameConsoleOptions.Options;
             }
         }
-        public List<Command> Commands { get; set; }
+        public bool Enabled { get; set; }
 
         private readonly SpriteBatch spriteBatch;
         private readonly InputProcessor inputProcesser;
         private readonly Renderer renderer;
+        private List<Command> commands;
 
         public GameConsole(Game game, SpriteBatch spriteBatch, IEnumerable<Command> commands) : this(game, spriteBatch, commands, new GameConsoleOptions()) { }
         public GameConsole(Game game, SpriteBatch spriteBatch, IEnumerable<Command> commands, GameConsoleOptions options)
@@ -32,12 +33,13 @@ namespace XNAGameConsole
             {
                 options.Font = Game.Content.Load<SpriteFont>("ConsoleFont");
             }
-            Commands = commands.ToList();
+            this.commands = commands.ToList();
+            Enabled = true;
             GameConsoleOptions.Options = options;
             EventInput.Initialize(game.Window);
             this.spriteBatch = spriteBatch;
             AddPresetCommands();
-            inputProcesser = new InputProcessor(new CommandProcesser(Commands), renderer);
+            inputProcesser = new InputProcessor(new CommandProcesser(commands), renderer);
             inputProcesser.Open += (s, e) => renderer.Open();
             inputProcesser.Close += (s, e) => renderer.Close();
 
@@ -46,6 +48,10 @@ namespace XNAGameConsole
 
         public override void Draw(GameTime gameTime)
         {
+            if (!Enabled)
+            {
+                return;
+            }
             spriteBatch.Begin();
             renderer.Draw(gameTime);
             spriteBatch.End();
@@ -54,6 +60,10 @@ namespace XNAGameConsole
 
         public override void Update(GameTime gameTime)
         {
+            if (!Enabled)
+            {
+                return;
+            }
             renderer.Update(gameTime);
             base.Update(gameTime);
         }
@@ -65,16 +75,16 @@ namespace XNAGameConsole
 
         void AddPresetCommands()
         {
-            Commands.Add(new Command("exit", a =>
+            commands.Add(new Command("exit", a =>
                                                  {
                                                      Game.Exit();
                                                      return "Existing game";
-                                                 }, "Forcefully exists the game"));
-            Commands.Add(new Command("help", a =>
+                                                 }, "Forcefully exist the game"));
+            commands.Add(new Command("help", a =>
                                                  {
                                                      if (a != null && a.Length >= 1)
                                                      {
-                                                         var command = Commands.Where(c => c.Name == a[0]).FirstOrDefault();
+                                                         var command = commands.Where(c => c.Name == a[0]).FirstOrDefault();
                                                          if (command != null)
                                                          {
                                                              return String.Format("{0}: {1}\n", command.Name, command.Description);
@@ -82,8 +92,8 @@ namespace XNAGameConsole
                                                          return "ERROR: Invalid command '" + a[0] + "'";
                                                      }
                                                      var help = new StringBuilder();
-                                                     Commands.Sort();
-                                                     foreach (var command in Commands)
+                                                     commands.Sort();
+                                                     foreach (var command in commands)
                                                      {
                                                          help.Append(String.Format("{0}: {1}\n", command.Name, command.Description));
                                                      }

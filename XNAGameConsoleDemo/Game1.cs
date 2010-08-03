@@ -91,7 +91,8 @@ namespace XNATextInput
                 this.Exit();
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
-                console.WriteLine("ole haha");
+                //console.WriteLine("ole haha");
+                console.Enabled = !console.Enabled;
             }
 
             // TODO: Add your update logic here
