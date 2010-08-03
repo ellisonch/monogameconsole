@@ -16,11 +16,12 @@ namespace XNAGameConsole
         public string Prompt { get; set; }
         public int Padding { get; set; }
         public int Margin { get; set; }
+        public bool OpenOnWrite { get; set; }
+        public SpriteFont Font { get; set; }
 
         public GameConsoleOptions()
         {
             //Set the default options
-
             ToggleKey = '`';
             BackgroundColor = new Color(0, 0, 0, 125);
             FontColor = Color.White;
@@ -29,6 +30,7 @@ namespace XNAGameConsole
             Prompt = "$";
             Padding = 30;
             Margin = 30;
+            OpenOnWrite = true;
         }
 
         internal static GameConsoleOptions Options { get; set; }

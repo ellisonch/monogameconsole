@@ -89,10 +89,10 @@ namespace XNATextInput
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-            //if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            //{
-            //    this.Exit();
-            //}
+            if (Keyboard.GetState().IsKeyDown(Keys.F1))
+            {
+                console.WriteLine("ole haha");
+            }
 
             // TODO: Add your update logic here
             player.Update(gameTime);
