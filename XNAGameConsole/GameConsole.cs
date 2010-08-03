@@ -18,6 +18,8 @@ namespace XNAGameConsole
                 return GameConsoleOptions.Options;
             }
         }
+        public List<Command> Commands { get; set; }
+
         private readonly SpriteBatch spriteBatch;
         private readonly InputProcessor inputProcesser;
         private readonly Renderer renderer;
@@ -30,10 +32,12 @@ namespace XNAGameConsole
             {
                 options.Font = Game.Content.Load<SpriteFont>("ConsoleFont");
             }
+            Commands = commands.ToList();
             GameConsoleOptions.Options = options;
             EventInput.Initialize(game.Window);
             this.spriteBatch = spriteBatch;
-            inputProcesser = new InputProcessor(new CommandProcesser(commands), renderer);
+            AddPresetCommands();
+            inputProcesser = new InputProcessor(new CommandProcesser(Commands), renderer);
             inputProcesser.Open += (s, e) => renderer.Open();
             inputProcesser.Close += (s, e) => renderer.Close();
 
@@ -57,6 +61,34 @@ namespace XNAGameConsole
         public void WriteLine(string text)
         {
             inputProcesser.AddToBuffer(text);
+        }
+
+        void AddPresetCommands()
+        {
+            Commands.Add(new Command("exit", a =>
+                                                 {
+                                                     Game.Exit();
+                                                     return "Existing game";
+                                                 }, "Forcefully exists the game"));
+            Commands.Add(new Command("help", a =>
+                                                 {
+                                                     if (a != null && a.Length >= 1)
+                                                     {
+                                                         var command = Commands.Where(c => c.Name == a[0]).FirstOrDefault();
+                                                         if (command != null)
+                                                         {
+                                                             return String.Format("{0}: {1}\n", command.Name, command.Description);
+                                                         }
+                                                         return "ERROR: Invalid command '" + a[0] + "'";
+                                                     }
+                                                     var help = new StringBuilder();
+                                                     Commands.Sort();
+                                                     foreach (var command in Commands)
+                                                     {
+                                                         help.Append(String.Format("{0}: {1}\n", command.Name, command.Description));
+                                                     }
+                                                     return help.ToString();
+                                                 }, "Show all commands and their description"));
         }
     }
 }

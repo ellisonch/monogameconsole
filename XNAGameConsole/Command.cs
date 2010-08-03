@@ -5,7 +5,7 @@ using System.Text;
 
 namespace XNAGameConsole
 {
-    public class Command
+    public class Command:IComparable<Command>
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -19,5 +19,9 @@ namespace XNAGameConsole
             Description = description;
         }
 
+        public int CompareTo(Command other)
+        {
+            return Name.CompareTo(other.Name);
+        }
     }
 }

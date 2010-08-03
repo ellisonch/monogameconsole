@@ -111,9 +111,12 @@ namespace XNAGameConsole
             {
                 return;
             }
-            var output = commandProcesser.Process(Buffer.Output);
+            var output = commandProcesser.Process(Buffer.Output).Split('\n').Where(l => l != "");
             Out.Add(new OutputLine(Buffer.Output, OutputLineType.Command));
-            Out.Add(new OutputLine(output, OutputLineType.Output));
+            foreach (var line in output)
+            {
+                Out.Add(new OutputLine(line, OutputLineType.Output));
+            }
             CommandHistory.Add(Buffer.Output);
             Buffer.Output = "";
         }

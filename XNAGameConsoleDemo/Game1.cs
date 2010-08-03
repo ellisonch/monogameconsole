@@ -42,17 +42,17 @@ namespace XNATextInput
             Services.AddService(typeof(SpriteBatch), spriteBatch);
             var consoleCommands = new []
                                       {
-                                          new Command("addPlayer", a => "Adding Player: " + a.First()), 
+                                          new Command("addPlayer", a => "Adding Player: " + a.First(), "Add a new player"), 
                                           new Command("move", a =>
                                                                   {
                                                                       player.Position = new Vector2(float.Parse(a[0]), float.Parse(a[1]));
                                                                       return "Moved player";
-                                                                  }), 
+                                                                  },"Moves the player"), 
                                           new Command("rotDeg", a =>
                                                                   {
                                                                       player.Angle = MathHelper.ToRadians(float.Parse(a[0]));
                                                                       return "Rotated player";
-                                                                  }), 
+                                                                  }, "Rotates the player"), 
                                       };
             console = new GameConsole(this, spriteBatch, consoleCommands);
             Components.Add(console);
