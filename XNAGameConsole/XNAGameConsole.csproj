@@ -85,6 +85,7 @@
   <ItemGroup>
     <Compile Include="Command.cs" />
     <Compile Include="CommandHistory.cs" />
+    <Compile Include="GameConsoleOptions.cs" />
     <Compile Include="KeyboardCapture\CharacterEventArgs.cs" />
     <Compile Include="KeyboardCapture\EventInput.cs" />
     <Compile Include="KeyboardCapture\KeyEventArgs.cs" />

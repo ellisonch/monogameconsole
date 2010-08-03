@@ -10,22 +10,20 @@ namespace XNAGameConsole
 {
     public class GameConsole : DrawableGameComponent
     {
-        public char ActivateKey { get; set; }
-
         private readonly SpriteBatch spriteBatch;
         private readonly InputProcessor inputProcesser;
         private readonly Renderer renderer;
 
-        public GameConsole(Game game, SpriteBatch spriteBatch, IEnumerable<Command> commands) : this(game,spriteBatch,commands,'`'){}
-        public GameConsole(Game game, SpriteBatch spriteBatch, IEnumerable<Command> commands, char activateKey) : base(game)
+        public GameConsole(Game game, SpriteBatch spriteBatch, IEnumerable<Command> commands) : this(game,spriteBatch,commands, new GameConsoleOptions()){}
+        public GameConsole(Game game, SpriteBatch spriteBatch, IEnumerable<Command> commands, GameConsoleOptions options) : base(game)
         {
+            GameConsoleOptions.Options = options;
             EventInput.Initialize(game.Window);
             this.spriteBatch = spriteBatch;
-            inputProcesser = new InputProcessor(activateKey, new CommandProcesser(commands));
+            inputProcesser = new InputProcessor(new CommandProcesser(commands));
             inputProcesser.Open += (s, e) => renderer.Open();
             inputProcesser.Close += (s, e) => renderer.Close();
 
-            ActivateKey = activateKey;
             renderer = new Renderer(game, spriteBatch, inputProcesser, Game.Content.Load<SpriteFont>("ConsoleFont"));
         }
 

@@ -22,15 +22,13 @@ namespace XNAGameConsole
         private const int BACKSPACE = 8;
         private const int ENTER = 13;
         private const int TAB = 9;
-        private char toggleKey;
         private bool isActive;
         private CommandProcesser commandProcesser;
 
-        public InputProcessor(char toggleKey, CommandProcesser commandProcesser)
+        public InputProcessor(CommandProcesser commandProcesser)
         {
             this.commandProcesser = commandProcesser;
             isActive = false;
-            this.toggleKey = toggleKey;
             CommandHistory = new CommandHistory();
             Out = new List<OutputLine>();
             Buffer = new OutputLine("",OutputLineType.Command);
@@ -44,12 +42,13 @@ namespace XNAGameConsole
             {
                 case Keys.Up: Buffer.Output = CommandHistory.Previous(); break;
                 case Keys.Down: Buffer.Output = CommandHistory.Next(); break;
+                    //case Keys.Left: 
             }
         }
 
         void EventInput_CharEntered(object sender, CharacterEventArgs e)
         {
-            if (e.Character == toggleKey)
+            if (e.Character == GameConsoleOptions.Options.ToggleKey)
             {
                 isActive = !isActive;
                 if (isActive)

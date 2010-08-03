@@ -5,7 +5,7 @@ using System.Text;
 
 namespace XNAGameConsole.KeyboardCapture
 {
-    public class CharacterEventArgs : EventArgs
+    class CharacterEventArgs : EventArgs
     {
         private readonly char character;
         private readonly int lParam;

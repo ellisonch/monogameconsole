@@ -45,9 +45,13 @@ namespace XNATextInput
                                           new Command("addPlayer", a => "Adding Player: " + a.First()), 
                                           new Command("move", a =>
                                                                   {
-                                                                      player.Position = new Vector2(float.Parse(a[0]),
-                                                                                                    float.Parse(a[1]));
+                                                                      player.Position = new Vector2(float.Parse(a[0]), float.Parse(a[1]));
                                                                       return "Moved player";
+                                                                  }), 
+                                          new Command("rotDeg", a =>
+                                                                  {
+                                                                      player.Angle = MathHelper.ToRadians(float.Parse(a[0]));
+                                                                      return "Rotated player";
                                                                   }), 
                                       };
             console = new GameConsole(this, spriteBatch, consoleCommands);

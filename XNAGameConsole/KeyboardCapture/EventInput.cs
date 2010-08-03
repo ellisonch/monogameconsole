@@ -6,11 +6,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace XNAGameConsole.KeyboardCapture
 {
-    public delegate void CharEnteredHandler( object sender, CharacterEventArgs e );
+     delegate void CharEnteredHandler( object sender, CharacterEventArgs e );
 
-    public delegate void KeyEventHandler( object sender, KeyEventArgs e );
+     delegate void KeyEventHandler( object sender, KeyEventArgs e );
 
-    public static class EventInput
+     static class EventInput
     {
         /// <summary>
         /// Event raised when a character has been entered.

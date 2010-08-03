@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace XNAGameConsole.KeyboardCapture
 {
-    public class KeyEventArgs : EventArgs
+    class KeyEventArgs : EventArgs
     {
         public KeyEventArgs( Keys keyCode )
         {

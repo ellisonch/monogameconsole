@@ -5,7 +5,7 @@ using System.Text;
 
 namespace XNAGameConsole
 {
-    public enum OutputLineType
+    enum OutputLineType
     {
         Command,
         Output
@@ -26,7 +26,7 @@ namespace XNAGameConsole
         {
             switch (Type)
             {
-                case OutputLineType.Command: return String.Format("> {0}", Output);
+                case OutputLineType.Command: return String.Format("{0} {1}", GameConsoleOptions.Options.Prompt, Output);
                 case OutputLineType.Output: return String.Format("{0}", Output);
             }
             return "";
