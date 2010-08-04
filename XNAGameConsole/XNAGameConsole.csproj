@@ -91,11 +91,12 @@
     <Compile Include="KeyboardCapture\KeyEventArgs.cs" />
     <Compile Include="OutputLine.cs" />
     <Compile Include="CommandProcesser.cs" />
-    <Compile Include="GameConsole.cs" />
+    <Compile Include="GameConsoleComponent.cs" />
     <Compile Include="InputProcessor.cs" />
     <Compile Include="PastCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderer.cs" />
+    <Compile Include="GameConsole.cs" />
   </ItemGroup>
   <ItemGroup>
     <NestedContentProject Include="Content\Content.contentproj">

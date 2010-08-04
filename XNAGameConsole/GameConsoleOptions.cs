@@ -12,6 +12,7 @@ namespace XNAGameConsole
         public Color BackgroundColor { get; set; }
         public Color FontColor { get; set; }
         public float AnimationSpeed { get; set; }
+        public float CursorBlinkSpeed { get; set; }
         public int Height { get; set; }
         public string Prompt { get; set; }
         public int Padding { get; set; }
@@ -26,6 +27,7 @@ namespace XNAGameConsole
             BackgroundColor = new Color(0, 0, 0, 125);
             FontColor = Color.White;
             AnimationSpeed = 1;
+            CursorBlinkSpeed = 0.5f;
             Height = 300;
             Prompt = "$";
             Padding = 30;
@@ -34,5 +36,6 @@ namespace XNAGameConsole
         }
 
         internal static GameConsoleOptions Options { get; set; }
+        internal static List<Command> Commands { get; set; }
     }
 }

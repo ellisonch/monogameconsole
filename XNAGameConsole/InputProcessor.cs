@@ -28,12 +28,10 @@ namespace XNAGameConsole
         private const int TAB = 9;
         private bool isActive;
         private CommandProcesser commandProcesser;
-        private Renderer renderer;
 
-        public InputProcessor(CommandProcesser commandProcesser, Renderer renderer)
+        public InputProcessor(CommandProcesser commandProcesser)
         {
             this.commandProcesser = commandProcesser;
-            this.renderer = renderer;
             isActive = false;
             CommandHistory = new CommandHistory();
             Out = new List<OutputLine>();
@@ -123,19 +121,21 @@ namespace XNAGameConsole
 
         void AutoComplete()
         {
-            var match = GetMatchingCommand();
+            var lastSpacePosition = Buffer.Output.LastIndexOf(' ');
+            string textToMatch = lastSpacePosition < 0 ? Buffer.Output : Buffer.Output.Substring(lastSpacePosition + 1, Buffer.Output.Length - lastSpacePosition - 1);
+            var match = GetMatchingCommand(textToMatch);
             if (match == null)
             {
                 return;
             }
-            var restOfTheCommand = match.Name.Substring(Buffer.Output.Length);
+            var restOfTheCommand = match.Name.Substring(textToMatch.Length);
             Buffer.Output += restOfTheCommand + " ";
         }
 
-        Command GetMatchingCommand()
+        Command GetMatchingCommand(string command)
         {
-            var matchingCommands = commandProcesser.Commands.Where(c => c.Name.IndexOf(Buffer.Output, 0) == 0);
-            return matchingCommands.Count() < 1 ? null : matchingCommands.First();
+            var matchingCommands = GameConsoleOptions.Commands.Where(c => c.Name.StartsWith(command));
+            return matchingCommands.FirstOrDefault();
         }
 
         public void AddToBuffer(string text)

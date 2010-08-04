@@ -39,7 +39,7 @@ namespace XNATextInput
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Services.AddService(typeof(SpriteBatch), spriteBatch);
+            Services.AddService(typeof(SpriteBatch),spriteBatch);
             var consoleCommands = new []
                                       {
                                           new Command("addPlayer", a => "Adding Player: " + a.First(), "Add a new player"), 
@@ -55,7 +55,7 @@ namespace XNATextInput
                                                                   }, "Rotates the player"), 
                                       };
             console = new GameConsole(this, spriteBatch, consoleCommands);
-            Components.Add(console);
+            console.Commands.Add(new Command("another", a => "extra", "an extra command"));
             player = new Player(this);
             base.Initialize();
         }
@@ -92,7 +92,7 @@ namespace XNATextInput
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
                 //console.WriteLine("ole haha");
-                console.Active = !console.Active;
+                console.Enabled = !console.Enabled;
             }
 
             // TODO: Add your update logic here

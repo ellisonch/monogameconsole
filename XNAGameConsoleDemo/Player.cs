@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace XNATextInput
 {
@@ -11,6 +12,13 @@ namespace XNATextInput
     {
         public Vector2 Position { get; set; }
         public float Angle { get; set; }
+        Vector2 Velocity
+        {
+            get
+            {
+                return new Vector2((float)Math.Sin(Angle),-(float)Math.Cos(Angle)) * 10;
+            }
+        }
 
         Texture2D PlayerTexture { get; set; }
 
@@ -25,7 +33,22 @@ namespace XNATextInput
 
         public void Update(GameTime gameTime)
         {
-            
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            {
+                Angle -= 0.1f;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+                Angle += 0.1f;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                Position += Velocity;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                Position -= Velocity;
+            }
         }
 
         public void Draw(GameTime gameTime)

@@ -5,19 +5,12 @@ using System.Text;
 
 namespace XNAGameConsole
 {
-    class CommandProcesser//:ICommandProcesser
+    class CommandProcesser
     {
-        public IEnumerable<Command> Commands { get; set; }
-
-        public CommandProcesser(IEnumerable<Command> commands)
-        {
-            Commands = commands;
-        }
-
         public string Process(string buffer)
         {
             string commandName = GetCommandName(buffer);
-            Command command = Commands.Where(c => c.Name == commandName).FirstOrDefault();
+            Command command = GameConsoleOptions.Commands.Where(c => c.Name == commandName).FirstOrDefault();
             var arguments = GetArguments(buffer);
             if (command == null)
             {
@@ -26,7 +19,7 @@ namespace XNAGameConsole
             string commandOutput;
             try
             {
-            commandOutput = command.Action(arguments);
+                commandOutput = command.Action(arguments);
             }
             catch (Exception ex)
             {
