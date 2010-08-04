@@ -132,9 +132,9 @@ namespace XNAGameConsole
             Buffer.Output += restOfTheCommand + " ";
         }
 
-        Command GetMatchingCommand(string command)
+        ICommand GetMatchingCommand(string command)
         {
-            var matchingCommands = GameConsoleOptions.Commands.Where(c => c.Name.StartsWith(command));
+            var matchingCommands = GameConsoleOptions.Commands.Where(c => c.Name != null && c.Name.StartsWith(command));
             return matchingCommands.FirstOrDefault();
         }
 
@@ -153,11 +153,12 @@ namespace XNAGameConsole
 
         public void AddToOutput(string text)
         {
-            Out.Add(new OutputLine(text, OutputLineType.Output));
             if (GameConsoleOptions.Options.OpenOnWrite)
             {
+                isActive = true;
                 Open(this, EventArgs.Empty);
             }
+            Out.Add(new OutputLine(text, OutputLineType.Output));
         }
 
         static bool IsValid(char letter)

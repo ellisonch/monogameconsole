@@ -10,7 +10,7 @@ namespace XNAGameConsole
         public string Process(string buffer)
         {
             string commandName = GetCommandName(buffer);
-            Command command = GameConsoleOptions.Commands.Where(c => c.Name == commandName).FirstOrDefault();
+            ICommand command = GameConsoleOptions.Commands.Where(c => c.Name == commandName).FirstOrDefault();
             var arguments = GetArguments(buffer);
             if (command == null)
             {
@@ -19,7 +19,7 @@ namespace XNAGameConsole
             string commandOutput;
             try
             {
-                commandOutput = command.Action(arguments);
+                commandOutput = command.Execute(arguments);
             }
             catch (Exception ex)
             {
@@ -39,7 +39,7 @@ namespace XNAGameConsole
             var firstSpace = buffer.IndexOf(' ');
             if (firstSpace < 0)
             {
-                return null;
+                return new string[0];
             }
             
             var args = buffer.Substring(firstSpace, buffer.Length - firstSpace);

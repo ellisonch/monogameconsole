@@ -156,12 +156,20 @@ namespace XNAGameConsole
 
         public void Open()
         {
+            if (CurrentState == State.Opening || CurrentState == State.Opened)
+            {
+                return;
+            }
             stateChangeTime = DateTime.Now;
             CurrentState = State.Opening;
         }
 
         public void Close()
         {
+            if (CurrentState == State.Closing || CurrentState == State.Closed)
+            {
+                return;
+            }
             stateChangeTime = DateTime.Now;
             CurrentState = State.Closing;
         }

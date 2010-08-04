@@ -36,6 +36,6 @@ namespace XNAGameConsole
         }
 
         internal static GameConsoleOptions Options { get; set; }
-        internal static List<Command> Commands { get; set; }
+        internal static List<ICommand> Commands { get; set; }
     }
 }

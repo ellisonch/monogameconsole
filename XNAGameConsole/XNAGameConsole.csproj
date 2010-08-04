@@ -85,7 +85,13 @@
   <ItemGroup>
     <Compile Include="Command.cs" />
     <Compile Include="CommandHistory.cs" />
+    <Compile Include="Commands\ClearScreenCommand.cs" />
+    <Compile Include="Commands\CommandComparer.cs" />
+    <Compile Include="Commands\CustomCommand.cs" />
+    <Compile Include="Commands\ExitCommand.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="GameConsoleOptions.cs" />
+    <Compile Include="ICommand.cs" />
     <Compile Include="KeyboardCapture\CharacterEventArgs.cs" />
     <Compile Include="KeyboardCapture\EventInput.cs" />
     <Compile Include="KeyboardCapture\KeyEventArgs.cs" />

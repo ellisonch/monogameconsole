@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using XNAGameConsole;
 
 namespace XNATextInput
 {
@@ -20,6 +21,8 @@ namespace XNATextInput
             }
         }
 
+        private GameConsole console;
+
         Texture2D PlayerTexture { get; set; }
 
         private SpriteBatch spriteBatch;
@@ -29,6 +32,7 @@ namespace XNATextInput
             spriteBatch = (SpriteBatch) game.Services.GetService(typeof (SpriteBatch));
             PlayerTexture = game.Content.Load<Texture2D>("player");
             Position = new Vector2(300,300);
+            console = (GameConsole)game.Services.GetService(typeof (GameConsole));
         }
 
         public void Update(GameTime gameTime)
@@ -36,6 +40,7 @@ namespace XNATextInput
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
                 Angle -= 0.1f;
+                console.Write("angle:" + Angle);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
@@ -49,6 +54,7 @@ namespace XNATextInput
             {
                 Position -= Velocity;
             }
+                //console.Write("position:" + Position);
         }
 
         public void Draw(GameTime gameTime)

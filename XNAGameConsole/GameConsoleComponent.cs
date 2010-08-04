@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using XNAGameConsole.Commands;
 using XNAGameConsole.KeyboardCapture;
 
 namespace XNAGameConsole
@@ -16,7 +17,8 @@ namespace XNAGameConsole
         private readonly InputProcessor inputProcesser;
         private readonly Renderer renderer;
 
-        public GameConsoleComponent(GameConsole console, Game game, SpriteBatch spriteBatch) : base(game)
+        public GameConsoleComponent(GameConsole console, Game game, SpriteBatch spriteBatch)
+            : base(game)
         {
             this.console = console;
             EventInput.Initialize(game.Window);
@@ -27,6 +29,8 @@ namespace XNAGameConsole
             inputProcesser.Close += (s, e) => renderer.Close();
 
             renderer = new Renderer(game, spriteBatch, inputProcesser);
+            var inbuiltCommands = new ICommand[] {new ClearScreenCommand(inputProcesser),new ExitCommand(game),new HelpCommand()};
+            GameConsoleOptions.Commands.AddRange(inbuiltCommands);
         }
 
         public override void Draw(GameTime gameTime)
@@ -58,31 +62,36 @@ namespace XNAGameConsole
 
         void AddPresetCommands()
         {
-            
-            GameConsoleOptions.Commands.Add(new Command("exit", a =>
-                                                 {
-                                                     Game.Exit();
-                                                     return "Existing game";
-                                                 }, "Forcefully exist the game"));
-            GameConsoleOptions.Commands.Add(new Command("help", a =>
-                                                 {
-                                                     if (a != null && a.Length >= 1)
-                                                     {
-                                                         var command = GameConsoleOptions.Commands.Where(c => c.Name == a[0]).FirstOrDefault();
-                                                         if (command != null)
-                                                         {
-                                                             return String.Format("{0}: {1}\n", command.Name, command.Description);
-                                                         }
-                                                         return "ERROR: Invalid command '" + a[0] + "'";
-                                                     }
-                                                     var help = new StringBuilder();
-                                                     GameConsoleOptions.Commands.Sort();
-                                                     foreach (var command in GameConsoleOptions.Commands)
-                                                     {
-                                                         help.Append(String.Format("{0}: {1}\n", command.Name, command.Description));
-                                                     }
-                                                     return help.ToString();
-                                                 }, "Show all commands and their description"));
+            //var inbuiltCommands = new[] {new Command("exit", a =>
+            //                                     {
+            //                                         Game.Exit();
+            //                                         return "Existing game";
+            //                                     }, "Forcefully exist the game"),
+            //                                     new Command("help", a =>
+            //                                     {
+            //                                         if (a.Length >= 1)
+            //                                         {
+            //                                             var command = GameConsoleOptions.Commands.Where(c => c.Name == a[0]).FirstOrDefault();
+            //                                             if (command != null)
+            //                                             {
+            //                                                 return String.Format("{0}: {1}\n", command.Name, command.Description);
+            //                                             }
+            //                                             return "ERROR: Invalid command '" + a[0] + "'";
+            //                                         }
+            //                                         var help = new StringBuilder();
+            //                                         GameConsoleOptions.Commands.Sort();
+            //                                         foreach (var command in GameConsoleOptions.Commands)
+            //                                         {
+            //                                             help.Append(String.Format("{0}: {1}\n", command.Name, command.Description));
+            //                                         }
+            //                                         return help.ToString();
+            //                                     }, "Show all commands and their description"), 
+            //                                     new Command("clear", a =>
+            //                                                         {
+            //                                                             inputProcesser.Out.Clear();
+            //                                                             return "";
+            //                                                         }, "Clear the console")};
+            //GameConsoleOptions.Commands.AddRange(inbuiltCommands);
         }
     }
 }

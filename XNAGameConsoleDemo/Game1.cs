@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 using XNAGameConsole;
+using XNAGameConsoleDemo.ConsoleCommands;
 
 namespace XNATextInput
 {
@@ -39,24 +40,18 @@ namespace XNATextInput
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Services.AddService(typeof(SpriteBatch),spriteBatch);
-            var consoleCommands = new []
-                                      {
-                                          new Command("addPlayer", a => "Adding Player: " + a.First(), "Add a new player"), 
-                                          new Command("move", a =>
-                                                                  {
-                                                                      player.Position = new Vector2(float.Parse(a[0]), float.Parse(a[1]));
-                                                                      return "Moved player";
-                                                                  },"Moves the player"), 
-                                          new Command("rotDeg", a =>
-                                                                  {
-                                                                      player.Angle = MathHelper.ToRadians(float.Parse(a[0]));
-                                                                      return "Rotated player";
-                                                                  }, "Rotates the player"), 
-                                      };
-            console = new GameConsole(this, spriteBatch, consoleCommands);
-            console.Commands.Add(new Command("another", a => "extra", "an extra command"));
+            Services.AddService(typeof(SpriteBatch), spriteBatch);
             player = new Player(this);
+
+            var commands = new ICommand[] { new MovePlayerCommand(player), new RotatePlayerDegreesCommand(player) };
+            console = new GameConsole(this, spriteBatch, commands);
+            console.AddCommand("rotRad", a =>
+                                             {
+                                                 var angle = float.Parse(a[0]);
+                                                 player.Angle = angle;
+                                                 return String.Format("Rotated the player to {0} radians", angle);
+                                             });
+
             base.Initialize();
         }
 
@@ -112,11 +107,6 @@ namespace XNATextInput
             spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        public void Write()
-        {
-            player.Position = new Vector2(100, 100);
         }
     }
 }
