@@ -92,7 +92,7 @@ namespace XNATextInput
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
                 //console.WriteLine("ole haha");
-                console.Enabled = !console.Enabled;
+                console.Active = !console.Active;
             }
 
             // TODO: Add your update logic here

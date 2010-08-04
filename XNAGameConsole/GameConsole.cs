@@ -18,7 +18,7 @@ namespace XNAGameConsole
                 return GameConsoleOptions.Options;
             }
         }
-        public bool Enabled { get; set; }
+        public bool Active { get; set; }
 
         private readonly SpriteBatch spriteBatch;
         private readonly InputProcessor inputProcesser;
@@ -34,7 +34,7 @@ namespace XNAGameConsole
                 options.Font = Game.Content.Load<SpriteFont>("ConsoleFont");
             }
             this.commands = commands.ToList();
-            Enabled = true;
+            Active = true;
             GameConsoleOptions.Options = options;
             EventInput.Initialize(game.Window);
             this.spriteBatch = spriteBatch;
@@ -48,7 +48,7 @@ namespace XNAGameConsole
 
         public override void Draw(GameTime gameTime)
         {
-            if (!Enabled)
+            if (!Active)
             {
                 return;
             }
@@ -60,7 +60,7 @@ namespace XNAGameConsole
 
         public override void Update(GameTime gameTime)
         {
-            if (!Enabled)
+            if (!Active)
             {
                 return;
             }
@@ -70,7 +70,7 @@ namespace XNAGameConsole
 
         public void WriteLine(string text)
         {
-            inputProcesser.AddToBuffer(text);
+            inputProcesser.AddToOutput(text);
         }
 
         void AddPresetCommands()

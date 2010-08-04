@@ -140,6 +140,19 @@ namespace XNAGameConsole
 
         public void AddToBuffer(string text)
         {
+            var lines = text.Split('\n').Where(line => line != "").ToArray();
+            int i;
+            for (i = 0; i < lines.Length - 1; i++)
+            {
+                var line = lines[i];
+                Buffer.Output += line;
+                ExecuteBuffer();
+            }
+            Buffer.Output += lines[i];
+        }
+
+        public void AddToOutput(string text)
+        {
             Out.Add(new OutputLine(text, OutputLineType.Output));
             if (GameConsoleOptions.Options.OpenOnWrite)
             {
@@ -147,7 +160,7 @@ namespace XNAGameConsole
             }
         }
 
-        bool IsValid(char letter)
+        static bool IsValid(char letter)
         {
             return GameConsoleOptions.Options.Font.Characters.Contains(letter);
         }
