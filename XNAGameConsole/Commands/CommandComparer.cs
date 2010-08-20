@@ -5,9 +5,9 @@ using System.Text;
 
 namespace XNAGameConsole.Commands
 {
-    class CommandComparer:IComparer<ICommand>
+    class CommandComparer:IComparer<IConsoleCommand>
     {
-        public int Compare(ICommand x, ICommand y)
+        public int Compare(IConsoleCommand x, IConsoleCommand y)
         {
             return x.Name.CompareTo(y.Name);
         }

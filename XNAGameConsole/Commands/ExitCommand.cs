@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace XNAGameConsole.Commands
 {
-    class ExitCommand : ICommand
+    class ExitCommand : IConsoleCommand
     {
         public string Name
         {
@@ -23,7 +23,7 @@ namespace XNAGameConsole.Commands
             }
         }
 
-        private Game game;
+        private readonly Game game;
         public ExitCommand(Game game)
         {
             this.game = game;

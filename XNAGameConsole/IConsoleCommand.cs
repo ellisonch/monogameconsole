@@ -5,7 +5,7 @@ using System.Text;
 
 namespace XNAGameConsole
 {
-    public interface ICommand
+    public interface IConsoleCommand
     {
         string Name { get; }
         string Description { get; }

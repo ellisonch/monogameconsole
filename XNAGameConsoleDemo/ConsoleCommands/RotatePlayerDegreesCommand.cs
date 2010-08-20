@@ -8,7 +8,7 @@ using XNATextInput;
 
 namespace XNAGameConsoleDemo.ConsoleCommands
 {
-    class RotatePlayerDegreesCommand:ICommand
+    class RotatePlayerDegreesCommand:IConsoleCommand
     {
         public string Name
         {

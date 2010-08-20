@@ -12,6 +12,13 @@ namespace XNAGameConsole
 {
     class GameConsoleComponent : DrawableGameComponent
     {
+        public bool IsOpen
+        {
+            get
+            {
+                return renderer.IsOpen;
+            }
+        }
         private readonly GameConsole console;
         private readonly SpriteBatch spriteBatch;
         private readonly InputProcessor inputProcesser;
@@ -29,7 +36,7 @@ namespace XNAGameConsole
             inputProcesser.Close += (s, e) => renderer.Close();
 
             renderer = new Renderer(game, spriteBatch, inputProcesser);
-            var inbuiltCommands = new ICommand[] {new ClearScreenCommand(inputProcesser),new ExitCommand(game),new HelpCommand()};
+            var inbuiltCommands = new IConsoleCommand[] {new ClearScreenCommand(inputProcesser),new ExitCommand(game),new HelpCommand()};
             GameConsoleOptions.Commands.AddRange(inbuiltCommands);
         }
 

@@ -41,9 +41,9 @@ namespace XNATextInput
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch);
-            player = new Player(this);
 
-            var commands = new ICommand[] { new MovePlayerCommand(player), new RotatePlayerDegreesCommand(player) };
+            player = new Player(this);
+            var commands = new IConsoleCommand[] { new MovePlayerCommand(player), new RotatePlayerDegreesCommand(player) };
             console = new GameConsole(this, spriteBatch, commands);
             console.AddCommand("rotRad", a =>
                                              {
@@ -51,7 +51,7 @@ namespace XNATextInput
                                                  player.Angle = angle;
                                                  return String.Format("Rotated the player to {0} radians", angle);
                                              });
-
+            console.Options.BackgroundColor = Color.Teal;
             base.Initialize();
         }
 
@@ -88,6 +88,10 @@ namespace XNATextInput
             {
                 //console.WriteLine("ole haha");
                 console.Enabled = !console.Enabled;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                console.WriteLine("ok\nlulz");
             }
 
             // TODO: Add your update logic here

@@ -19,6 +19,7 @@ namespace XNAGameConsole
         public int Margin { get; set; }
         public bool OpenOnWrite { get; set; }
         public SpriteFont Font { get; set; }
+        internal Texture2D RoundedCorner { get; set; }
 
         public GameConsoleOptions()
         {
@@ -36,6 +37,6 @@ namespace XNAGameConsole
         }
 
         internal static GameConsoleOptions Options { get; set; }
-        internal static List<ICommand> Commands { get; set; }
+        internal static List<IConsoleCommand> Commands { get; set; }
     }
 }

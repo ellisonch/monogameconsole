@@ -36,8 +36,8 @@ namespace XNAGameConsole
             CommandHistory = new CommandHistory();
             Out = new List<OutputLine>();
             Buffer = new OutputLine("", OutputLineType.Command);
-            EventInput.CharEntered += EventInput_CharEntered;
-            EventInput.KeyDown += EventInput_KeyDown;
+            EventInput.CharEntered += EventInput_CharEntered; //Handles the typable characters
+            EventInput.KeyDown += EventInput_KeyDown; //Handles the non-typable characters
         }
 
         void EventInput_KeyDown(object sender, KeyEventArgs e)
@@ -60,7 +60,6 @@ namespace XNAGameConsole
             {
                 case Keys.Up: Buffer.Output = CommandHistory.Previous(); break;
                 case Keys.Down: Buffer.Output = CommandHistory.Next(); break;
-                //case Keys.Left: 
             }
         }
 
@@ -132,7 +131,7 @@ namespace XNAGameConsole
             Buffer.Output += restOfTheCommand + " ";
         }
 
-        ICommand GetMatchingCommand(string command)
+        IConsoleCommand GetMatchingCommand(string command)
         {
             var matchingCommands = GameConsoleOptions.Commands.Where(c => c.Name != null && c.Name.StartsWith(command));
             return matchingCommands.FirstOrDefault();
@@ -158,7 +157,10 @@ namespace XNAGameConsole
                 isActive = true;
                 Open(this, EventArgs.Empty);
             }
-            Out.Add(new OutputLine(text, OutputLineType.Output));
+            foreach (var line in text.Split('\n'))
+            {
+                Out.Add(new OutputLine(line, OutputLineType.Output));
+            }
         }
 
         static bool IsValid(char letter)

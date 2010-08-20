@@ -10,7 +10,7 @@ namespace XNAGameConsole
         public string Process(string buffer)
         {
             string commandName = GetCommandName(buffer);
-            ICommand command = GameConsoleOptions.Commands.Where(c => c.Name == commandName).FirstOrDefault();
+            IConsoleCommand command = GameConsoleOptions.Commands.Where(c => c.Name == commandName).FirstOrDefault();
             var arguments = GetArguments(buffer);
             if (command == null)
             {

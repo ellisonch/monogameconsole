@@ -5,7 +5,7 @@ using System.Text;
 
 namespace XNAGameConsole.Commands
 {
-    class ClearScreenCommand:ICommand
+    class ClearScreenCommand:IConsoleCommand
     {
         public string Name { get
         {

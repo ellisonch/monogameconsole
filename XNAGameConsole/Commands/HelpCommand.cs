@@ -5,7 +5,7 @@ using System.Text;
 
 namespace XNAGameConsole.Commands
 {
-    class HelpCommand : ICommand
+    class HelpCommand : IConsoleCommand
     {
         public string Name
         {
@@ -14,7 +14,7 @@ namespace XNAGameConsole.Commands
 
         public string Description
         {
-            get { return "Shows help"; }
+            get { return "Displays the list of commands"; }
         }
 
         public string Execute(string[] arguments)

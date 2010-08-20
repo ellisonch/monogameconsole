@@ -8,7 +8,7 @@ using XNATextInput;
 
 namespace XNAGameConsoleDemo.ConsoleCommands
 {
-    class MovePlayerCommand:ICommand
+    class MovePlayerCommand:IConsoleCommand
     {
         public string Name
         {
