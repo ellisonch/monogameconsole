@@ -15,18 +15,23 @@ namespace XNAGameConsole
         public float CursorBlinkSpeed { get; set; }
         public int Height { get; set; }
         public string Prompt { get; set; }
+        public Color PromptColor { get; set; }
         public int Padding { get; set; }
         public int Margin { get; set; }
         public bool OpenOnWrite { get; set; }
         public SpriteFont Font { get; set; }
+
         internal Texture2D RoundedCorner { get; set; }
+
+        internal static GameConsoleOptions Options { get; set; }
+        internal static List<IConsoleCommand> Commands { get; set; }
 
         public GameConsoleOptions()
         {
-            //Set the default options
+            //Default options
             ToggleKey = '`';
             BackgroundColor = new Color(0, 0, 0, 125);
-            FontColor = Color.White;
+            FontColor = PromptColor = Color.White;
             AnimationSpeed = 1;
             CursorBlinkSpeed = 0.5f;
             Height = 300;
@@ -36,7 +41,5 @@ namespace XNAGameConsole
             OpenOnWrite = true;
         }
 
-        internal static GameConsoleOptions Options { get; set; }
-        internal static List<IConsoleCommand> Commands { get; set; }
     }
 }

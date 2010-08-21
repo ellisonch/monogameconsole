@@ -24,6 +24,7 @@ namespace XNAGameConsole
 
         public override string ToString()
         {
+            return Output;
             switch (Type)
             {
                 case OutputLineType.Command: return String.Format("{0} {1}", GameConsoleOptions.Options.Prompt, Output);

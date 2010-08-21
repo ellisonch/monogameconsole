@@ -17,7 +17,7 @@ namespace XNATextInput
         {
             get
             {
-                return new Vector2((float)Math.Sin(Angle),-(float)Math.Cos(Angle)) * 10;
+                return new Vector2((float)Math.Sin(Angle), -(float)Math.Cos(Angle)) * 10;
             }
         }
 
@@ -35,28 +35,13 @@ namespace XNATextInput
 
         public void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                Angle -= 0.1f;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                Angle += 0.1f;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                Position += Velocity;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                Position -= Velocity;
-            }
-                //console.Write("position:" + Position);
+            Angle += Keyboard.GetState().IsKeyDown(Keys.Right) ? 0.1f : Keyboard.GetState().IsKeyDown(Keys.Left) ? -0.1f : 0;
+            Position += Keyboard.GetState().IsKeyDown(Keys.Up) ? Velocity : Keyboard.GetState().IsKeyDown(Keys.Down) ? -Velocity : Vector2.Zero;
         }
 
         public void Draw(GameTime gameTime)
         {
-            spriteBatch.Draw(PlayerTexture, Position,null,Color.White,Angle,new Vector2(PlayerTexture.Width / 2, PlayerTexture.Height/2),1,SpriteEffects.None,1);
+            spriteBatch.Draw(PlayerTexture, Position, null, Color.White, Angle, new Vector2(PlayerTexture.Width / 2, PlayerTexture.Height / 2 + 10), 1, SpriteEffects.None, 1);
         }
     }
 }

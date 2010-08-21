@@ -33,7 +33,7 @@ namespace XNAGameConsole
         private Vector2 OpenedPosition, ClosedPosition, Position;
         private DateTime stateChangeTime;
         private Vector2 firstCommandPositionOffset;
-        private Vector2 firstCommandPosition
+        private Vector2 FirstCommandPosition
         {
             get
             {
@@ -69,7 +69,7 @@ namespace XNAGameConsole
             this.spriteBatch = spriteBatch;
             this.inputProcessor = inputProcessor;
             pixel = new Texture2D(game.GraphicsDevice, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);
-            pixel.SetData(new[] {Color.White});
+            pixel.SetData(new[] { Color.White });
             firstCommandPositionOffset = Vector2.Zero;
             oneCharacterWidth = GameConsoleOptions.Options.Font.MeasureString("x").X;
             maxCharactersPerLine = (int)((Bounds.Width - GameConsoleOptions.Options.Padding * 2) / oneCharacterWidth);
@@ -103,8 +103,9 @@ namespace XNAGameConsole
             }
             spriteBatch.Draw(pixel, Bounds, GameConsoleOptions.Options.BackgroundColor);
             DrawRoundedEdges();
-            var currCommandPosition = DrawExistingCommands(firstCommandPosition);
-            var bufferPosition = DrawCommand(inputProcessor.Buffer.ToString(), currCommandPosition, GameConsoleOptions.Options.FontColor);
+            var nextCommandPosition = DrawCommands(inputProcessor.Out, FirstCommandPosition);
+            nextCommandPosition = DrawPrompt(nextCommandPosition);
+            var bufferPosition = DrawCommand(inputProcessor.Buffer.ToString(), nextCommandPosition, GameConsoleOptions.Options.FontColor);
             DrawCursor(bufferPosition, gameTime);
         }
 
@@ -130,6 +131,13 @@ namespace XNAGameConsole
             spriteBatch.DrawString(GameConsoleOptions.Options.Font, (int)(gameTime.TotalRealTime.TotalSeconds / GameConsoleOptions.Options.CursorBlinkSpeed) % 2 == 0 ? "_" : "", position, GameConsoleOptions.Options.FontColor);
         }
 
+        /// <summary>
+        /// Draws the specified command and returns the position of the next command to be drawn
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="position"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
         Vector2 DrawCommand(string command, Vector2 position, Color color)
         {
             var splitLines = command.Length > maxCharactersPerLine ? SplitCommand(command, maxCharactersPerLine) : new[] { command };
@@ -158,19 +166,38 @@ namespace XNAGameConsole
             return lines;
         }
 
-        Vector2 DrawExistingCommands(Vector2 position)
+        /// <summary>
+        /// Draws the specified collection of commands and returns the position of the next command to be drawn
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        Vector2 DrawCommands(IEnumerable<OutputLine> lines, Vector2 position)
         {
-            foreach (var command in inputProcessor.Out)
+            var originalX = position.X;
+            foreach (var command in lines)
             {
+                if (command.Type == OutputLineType.Command)
+                {
+                    position = DrawPrompt(position);
+                }
                 position.Y = DrawCommand(command.ToString(), position, GameConsoleOptions.Options.FontColor).Y;
+                position.X = originalX;
             }
             return position;
         }
 
-        //void DrawPrompt(Point )
-        //{
-            
-        //}
+        /// <summary>
+        /// Draws the prompt at the specified position and returns the position of the text that will be drawn next to it
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        Vector2 DrawPrompt(Vector2 position)
+        {
+            spriteBatch.DrawString(GameConsoleOptions.Options.Font, GameConsoleOptions.Options.Prompt, position, GameConsoleOptions.Options.PromptColor);
+            position.X += oneCharacterWidth * GameConsoleOptions.Options.Prompt.Length + oneCharacterWidth;
+            return position;
+        }
 
         public void Open()
         {

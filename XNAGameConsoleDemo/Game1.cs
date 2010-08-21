@@ -51,7 +51,6 @@ namespace XNATextInput
                                                  player.Angle = angle;
                                                  return String.Format("Rotated the player to {0} radians", angle);
                                              });
-            console.Options.BackgroundColor = Color.Teal;
             base.Initialize();
         }
 
@@ -84,18 +83,12 @@ namespace XNATextInput
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-            if (Keyboard.GetState().IsKeyDown(Keys.F1))
-            {
-                //console.WriteLine("ole haha");
-                console.Enabled = !console.Enabled;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                console.WriteLine("ok\nlulz");
-            }
 
             // TODO: Add your update logic here
-            player.Update(gameTime);
+            if (!console.Opened)
+            {
+                player.Update(gameTime);
+            }
             base.Update(gameTime);
         }
 
