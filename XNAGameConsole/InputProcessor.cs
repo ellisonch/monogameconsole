@@ -26,7 +26,7 @@ namespace XNAGameConsole
         private const int BACKSPACE = 8;
         private const int ENTER = 13;
         private const int TAB = 9;
-        private bool isActive;
+        private bool isActive, isHandled;
         private CommandProcesser commandProcesser;
 
         public InputProcessor(CommandProcesser commandProcesser)
@@ -42,20 +42,20 @@ namespace XNAGameConsole
 
         void EventInput_KeyDown(object sender, KeyEventArgs e)
         {
-            bool handled = false;
             if (Keyboard.GetState().IsKeyDown(Keys.V) && Keyboard.GetState().IsKeyDown(Keys.LeftControl)) // CTRL + V
             {
                 if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA) //Thread Apartment must be in Single-Threaded for the Clipboard to work
                 {
                     AddToBuffer(Clipboard.GetText());
                 }
-                handled = true;
             }
 
-            if (handled)
+            if (e.KeyCode == GameConsoleOptions.Options.ToggleKey)
             {
-                return;
+                ToggleConsole();
+                isHandled = true;
             }
+
             switch (e.KeyCode)
             {
                 case Keys.Up: Buffer.Output = CommandHistory.Previous(); break;
@@ -63,26 +63,27 @@ namespace XNAGameConsole
             }
         }
 
+        void ToggleConsole()
+        {
+            isActive = !isActive;
+            if (isActive)
+            {
+                Open(this, EventArgs.Empty);
+            }
+            else
+            {
+                Close(this, EventArgs.Empty);
+            }
+        }
+
         void EventInput_CharEntered(object sender, CharacterEventArgs e)
         {
-            if (e.Character == GameConsoleOptions.Options.ToggleKey)
+            if (isHandled)
             {
-                isActive = !isActive;
-                if (isActive)
-                {
-                    Open(this, EventArgs.Empty);
-                }
-                else
-                {
-                    Close(this, EventArgs.Empty);
-                }
+                isHandled = false;
                 return;
             }
 
-            if (!isActive)
-            {
-                return;
-            }
             switch ((int)e.Character)
             {
                 case ENTER: ExecuteBuffer(); break;

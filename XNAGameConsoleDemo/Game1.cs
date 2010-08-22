@@ -44,7 +44,18 @@ namespace XNATextInput
 
             player = new Player(this);
             var commands = new IConsoleCommand[] { new MovePlayerCommand(player), new RotatePlayerDegreesCommand(player) };
-            console = new GameConsole(this, spriteBatch, commands);
+            console = new GameConsole(this, spriteBatch, commands, new GameConsoleOptions
+                                                                       {
+                                                                           Font = Content.Load<SpriteFont>("GameFont"),
+                                                                           FontColor = Color.LawnGreen,
+                                                                           Prompt = ">>>",
+                                                                           PromptColor = Color.Crimson,
+                                                                           CursorColor = Color.OrangeRed,
+                                                                           BackgroundColor = new Color(Color.Black,200),
+                                                                           Height = 400,
+                                                                           Padding = 50,
+                                                                           PastCommandOutputColor = Color.Aqua,
+                                                                       });
             console.AddCommand("rotRad", a =>
                                              {
                                                  var angle = float.Parse(a[0]);

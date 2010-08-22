@@ -105,7 +105,7 @@ namespace XNAGameConsole
             DrawRoundedEdges();
             var nextCommandPosition = DrawCommands(inputProcessor.Out, FirstCommandPosition);
             nextCommandPosition = DrawPrompt(nextCommandPosition);
-            var bufferPosition = DrawCommand(inputProcessor.Buffer.ToString(), nextCommandPosition, GameConsoleOptions.Options.FontColor);
+            var bufferPosition = DrawCommand(inputProcessor.Buffer.ToString(), nextCommandPosition, GameConsoleOptions.Options.BufferColor); //Draw the buffer
             DrawCursor(bufferPosition, gameTime);
         }
 
@@ -128,7 +128,7 @@ namespace XNAGameConsole
             var split = SplitCommand(inputProcessor.Buffer.ToString(), maxCharactersPerLine).Last();
             position.X += GameConsoleOptions.Options.Font.MeasureString(split).X;
             position.Y -= GameConsoleOptions.Options.Font.LineSpacing;
-            spriteBatch.DrawString(GameConsoleOptions.Options.Font, (int)(gameTime.TotalRealTime.TotalSeconds / GameConsoleOptions.Options.CursorBlinkSpeed) % 2 == 0 ? "_" : "", position, GameConsoleOptions.Options.FontColor);
+            spriteBatch.DrawString(GameConsoleOptions.Options.Font, (int)(gameTime.TotalRealTime.TotalSeconds / GameConsoleOptions.Options.CursorBlinkSpeed) % 2 == 0 ? GameConsoleOptions.Options.Cursor.ToString() : "", position, GameConsoleOptions.Options.CursorColor);
         }
 
         /// <summary>
@@ -181,7 +181,8 @@ namespace XNAGameConsole
                 {
                     position = DrawPrompt(position);
                 }
-                position.Y = DrawCommand(command.ToString(), position, GameConsoleOptions.Options.FontColor).Y;
+                //position.Y = DrawCommand(command.ToString(), position, GameConsoleOptions.Options.FontColor).Y;
+                position.Y = DrawCommand(command.ToString(), position, command.Type == OutputLineType.Command ? GameConsoleOptions.Options.PastCommandColor : GameConsoleOptions.Options.PastCommandOutputColor).Y;
                 position.X = originalX;
             }
             return position;
