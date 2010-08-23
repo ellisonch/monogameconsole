@@ -7,16 +7,16 @@ namespace XNAGameConsole
 {
     class CommandHistory:List<string>
     {
-        public int Index { get; set; }
+        public int Index { get; private set; }
 
         public void Reset()
         {
-            Index = Count - 1;
+            Index = Count;
         }
 
         public string Next()
         {
-            return Count == 0 ? "" : Index + 1 > Count - 1 ? this[Index] : this[++Index];
+            return Count == 0 ? "" : Index + 1 > Count - 1 ? this[Count - 1] : this[++Index];
         }
 
         public string Previous()
@@ -34,7 +34,7 @@ namespace XNAGameConsole
                     base.Add(part);
                 }
             }
-            Index = Count;
+            Reset();
         }
     }
 }

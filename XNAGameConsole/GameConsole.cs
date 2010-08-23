@@ -22,7 +22,7 @@ namespace XNAGameConsole
         /// </summary>
         public bool Opened { get { return console.IsOpen; } }
 
-        private GameConsoleComponent console;
+        private readonly GameConsoleComponent console;
 
         public GameConsole(Game game, SpriteBatch spriteBatch) : this(game, spriteBatch, new IConsoleCommand[0], new GameConsoleOptions()) { }
         public GameConsole(Game game, SpriteBatch spriteBatch, GameConsoleOptions options) : this(game, spriteBatch, new IConsoleCommand[0],options){}
@@ -55,10 +55,10 @@ namespace XNAGameConsole
         /// <summary>
         /// Adds a new command to the console
         /// </summary>
-        /// <param name="command"></param>
-        public void AddCommand(params IConsoleCommand[] command)
+        /// <param name="commands"></param>
+        public void AddCommand(params IConsoleCommand[] commands)
         {
-            Commands.AddRange(command);
+            Commands.AddRange(commands);
         }
 
         /// <summary>

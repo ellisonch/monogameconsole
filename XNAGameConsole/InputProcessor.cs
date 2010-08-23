@@ -40,6 +40,32 @@ namespace XNAGameConsole
             EventInput.KeyDown += EventInput_KeyDown; //Handles the non-typable characters
         }
 
+        public void AddToBuffer(string text)
+        {
+            var lines = text.Split('\n').Where(line => line != "").ToArray();
+            int i;
+            for (i = 0; i < lines.Length - 1; i++)
+            {
+                var line = lines[i];
+                Buffer.Output += line;
+                ExecuteBuffer();
+            }
+            Buffer.Output += lines[i];
+        }
+
+        public void AddToOutput(string text)
+        {
+            if (GameConsoleOptions.Options.OpenOnWrite)
+            {
+                isActive = true;
+                Open(this, EventArgs.Empty);
+            }
+            foreach (var line in text.Split('\n'))
+            {
+                Out.Add(new OutputLine(line, OutputLineType.Output));
+            }
+        }
+
         void EventInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.V) && Keyboard.GetState().IsKeyDown(Keys.LeftControl)) // CTRL + V
@@ -83,7 +109,7 @@ namespace XNAGameConsole
                 isHandled = false;
                 return;
             }
-
+            CommandHistory.Reset();
             switch ((int)e.Character)
             {
                 case ENTER: ExecuteBuffer(); break;
@@ -95,7 +121,7 @@ namespace XNAGameConsole
                     break;
                 case TAB: AutoComplete(); break;
                 default:
-                    if (IsValid(e.Character))
+                    if (IsPrintable(e.Character))
                     {
                         Buffer.Output += e.Character;
                     }
@@ -122,7 +148,7 @@ namespace XNAGameConsole
         void AutoComplete()
         {
             var lastSpacePosition = Buffer.Output.LastIndexOf(' ');
-            string textToMatch = lastSpacePosition < 0 ? Buffer.Output : Buffer.Output.Substring(lastSpacePosition + 1, Buffer.Output.Length - lastSpacePosition - 1);
+            var textToMatch = lastSpacePosition < 0 ? Buffer.Output : Buffer.Output.Substring(lastSpacePosition + 1, Buffer.Output.Length - lastSpacePosition - 1);
             var match = GetMatchingCommand(textToMatch);
             if (match == null)
             {
@@ -132,39 +158,14 @@ namespace XNAGameConsole
             Buffer.Output += restOfTheCommand + " ";
         }
 
-        IConsoleCommand GetMatchingCommand(string command)
+        static IConsoleCommand GetMatchingCommand(string command)
         {
             var matchingCommands = GameConsoleOptions.Commands.Where(c => c.Name != null && c.Name.StartsWith(command));
             return matchingCommands.FirstOrDefault();
         }
 
-        public void AddToBuffer(string text)
-        {
-            var lines = text.Split('\n').Where(line => line != "").ToArray();
-            int i;
-            for (i = 0; i < lines.Length - 1; i++)
-            {
-                var line = lines[i];
-                Buffer.Output += line;
-                ExecuteBuffer();
-            }
-            Buffer.Output += lines[i];
-        }
 
-        public void AddToOutput(string text)
-        {
-            if (GameConsoleOptions.Options.OpenOnWrite)
-            {
-                isActive = true;
-                Open(this, EventArgs.Empty);
-            }
-            foreach (var line in text.Split('\n'))
-            {
-                Out.Add(new OutputLine(line, OutputLineType.Output));
-            }
-        }
-
-        static bool IsValid(char letter)
+        static bool IsPrintable(char letter)
         {
             return GameConsoleOptions.Options.Font.Characters.Contains(letter);
         }

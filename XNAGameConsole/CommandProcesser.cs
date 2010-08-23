@@ -42,9 +42,8 @@ namespace XNAGameConsole
                 return new string[0];
             }
             
-            var args = buffer.Substring(firstSpace, buffer.Length - firstSpace);
-            var allArgs = args.Split(' ');
-            return allArgs.Where(a => a != "").ToArray();
+            var args = buffer.Substring(firstSpace, buffer.Length - firstSpace).Split(' ');
+            return args.Where(a => a != "").ToArray();
         }
     }
 }

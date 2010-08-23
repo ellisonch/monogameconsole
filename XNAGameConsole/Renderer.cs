@@ -21,16 +21,16 @@ namespace XNAGameConsole
         {
             get
             {
-                return CurrentState == State.Opened;
+                return currentState == State.Opened;
             }
         }
 
         private readonly SpriteBatch spriteBatch;
         private readonly InputProcessor inputProcessor;
-        private Texture2D pixel;
-        private int width;
-        private State CurrentState;
-        private Vector2 OpenedPosition, ClosedPosition, Position;
+        private readonly Texture2D pixel;
+        private readonly int width;
+        private State currentState;
+        private Vector2 openedPosition, closedPosition, position;
         private DateTime stateChangeTime;
         private Vector2 firstCommandPositionOffset;
         private Vector2 FirstCommandPosition
@@ -45,7 +45,7 @@ namespace XNAGameConsole
         {
             get
             {
-                return new Rectangle((int)Position.X, (int)Position.Y, width - (GameConsoleOptions.Options.Margin * 2), GameConsoleOptions.Options.Height);
+                return new Rectangle((int)position.X, (int)position.Y, width - (GameConsoleOptions.Options.Margin * 2), GameConsoleOptions.Options.Height);
             }
         }
 
@@ -57,15 +57,15 @@ namespace XNAGameConsole
             }
         }
 
-        private float oneCharacterWidth;
-        private int maxCharactersPerLine;
+        private readonly float oneCharacterWidth;
+        private readonly int maxCharactersPerLine;
 
         public Renderer(Game game, SpriteBatch spriteBatch, InputProcessor inputProcessor)
         {
-            CurrentState = State.Closed;
+            currentState = State.Closed;
             width = game.GraphicsDevice.Viewport.Width;
-            Position = ClosedPosition = new Vector2(GameConsoleOptions.Options.Margin, -GameConsoleOptions.Options.Height - GameConsoleOptions.Options.RoundedCorner.Height);
-            OpenedPosition = new Vector2(GameConsoleOptions.Options.Margin, 0);
+            position = closedPosition = new Vector2(GameConsoleOptions.Options.Margin, -GameConsoleOptions.Options.Height - GameConsoleOptions.Options.RoundedCorner.Height);
+            openedPosition = new Vector2(GameConsoleOptions.Options.Margin, 0);
             this.spriteBatch = spriteBatch;
             this.inputProcessor = inputProcessor;
             pixel = new Texture2D(game.GraphicsDevice, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);
@@ -77,27 +77,27 @@ namespace XNAGameConsole
 
         public void Update(GameTime gameTime)
         {
-            if (CurrentState == State.Opening)
+            if (currentState == State.Opening)
             {
-                Position.Y = MathHelper.SmoothStep(Position.Y, OpenedPosition.Y, ((float)((DateTime.Now - stateChangeTime).TotalSeconds / GameConsoleOptions.Options.AnimationSpeed)));
-                if (Position.Y == OpenedPosition.Y)
+                position.Y = MathHelper.SmoothStep(position.Y, openedPosition.Y, ((float)((DateTime.Now - stateChangeTime).TotalSeconds / GameConsoleOptions.Options.AnimationSpeed)));
+                if (position.Y == openedPosition.Y)
                 {
-                    CurrentState = State.Opened;
+                    currentState = State.Opened;
                 }
             }
-            if (CurrentState == State.Closing)
+            if (currentState == State.Closing)
             {
-                Position.Y = MathHelper.SmoothStep(Position.Y, ClosedPosition.Y, ((float)((DateTime.Now - stateChangeTime).TotalSeconds / GameConsoleOptions.Options.AnimationSpeed)));
-                if (Position.Y == ClosedPosition.Y)
+                position.Y = MathHelper.SmoothStep(position.Y, closedPosition.Y, ((float)((DateTime.Now - stateChangeTime).TotalSeconds / GameConsoleOptions.Options.AnimationSpeed)));
+                if (position.Y == closedPosition.Y)
                 {
-                    CurrentState = State.Closed;
+                    currentState = State.Closed;
                 }
             }
         }
 
         public void Draw(GameTime gameTime)
         {
-            if (CurrentState == State.Closed) //Do not draw if the console is closed
+            if (currentState == State.Closed) //Do not draw if the console is closed
             {
                 return;
             }
@@ -112,45 +112,45 @@ namespace XNAGameConsole
         void DrawRoundedEdges()
         {
             //Bottom-left edge
-            spriteBatch.Draw(GameConsoleOptions.Options.RoundedCorner, new Vector2(Position.X, Position.Y + GameConsoleOptions.Options.Height), null, GameConsoleOptions.Options.BackgroundColor, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+            spriteBatch.Draw(GameConsoleOptions.Options.RoundedCorner, new Vector2(position.X, position.Y + GameConsoleOptions.Options.Height), null, GameConsoleOptions.Options.BackgroundColor, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
             //Bottom-right edge 
-            spriteBatch.Draw(GameConsoleOptions.Options.RoundedCorner, new Vector2(Position.X + Bounds.Width - GameConsoleOptions.Options.RoundedCorner.Width, Position.Y + GameConsoleOptions.Options.Height), null, GameConsoleOptions.Options.BackgroundColor, 0, Vector2.Zero, 1, SpriteEffects.FlipHorizontally, 1);
+            spriteBatch.Draw(GameConsoleOptions.Options.RoundedCorner, new Vector2(position.X + Bounds.Width - GameConsoleOptions.Options.RoundedCorner.Width, position.Y + GameConsoleOptions.Options.Height), null, GameConsoleOptions.Options.BackgroundColor, 0, Vector2.Zero, 1, SpriteEffects.FlipHorizontally, 1);
             //connecting bottom-rectangle
             spriteBatch.Draw(pixel, new Rectangle(Bounds.X + GameConsoleOptions.Options.RoundedCorner.Width, Bounds.Y + GameConsoleOptions.Options.Height, Bounds.Width - GameConsoleOptions.Options.RoundedCorner.Width * 2, GameConsoleOptions.Options.RoundedCorner.Height), GameConsoleOptions.Options.BackgroundColor);
         }
 
-        void DrawCursor(Vector2 position, GameTime gameTime)
+        void DrawCursor(Vector2 pos, GameTime gameTime)
         {
-            if (!IsInBounds(position.Y))
+            if (!IsInBounds(pos.Y))
             {
                 return;
             }
             var split = SplitCommand(inputProcessor.Buffer.ToString(), maxCharactersPerLine).Last();
-            position.X += GameConsoleOptions.Options.Font.MeasureString(split).X;
-            position.Y -= GameConsoleOptions.Options.Font.LineSpacing;
-            spriteBatch.DrawString(GameConsoleOptions.Options.Font, (int)(gameTime.TotalRealTime.TotalSeconds / GameConsoleOptions.Options.CursorBlinkSpeed) % 2 == 0 ? GameConsoleOptions.Options.Cursor.ToString() : "", position, GameConsoleOptions.Options.CursorColor);
+            pos.X += GameConsoleOptions.Options.Font.MeasureString(split).X;
+            pos.Y -= GameConsoleOptions.Options.Font.LineSpacing;
+            spriteBatch.DrawString(GameConsoleOptions.Options.Font, (int)(gameTime.TotalRealTime.TotalSeconds / GameConsoleOptions.Options.CursorBlinkSpeed) % 2 == 0 ? GameConsoleOptions.Options.Cursor.ToString() : "", pos, GameConsoleOptions.Options.CursorColor);
         }
 
         /// <summary>
         /// Draws the specified command and returns the position of the next command to be drawn
         /// </summary>
         /// <param name="command"></param>
-        /// <param name="position"></param>
+        /// <param name="pos"></param>
         /// <param name="color"></param>
         /// <returns></returns>
-        Vector2 DrawCommand(string command, Vector2 position, Color color)
+        Vector2 DrawCommand(string command, Vector2 pos, Color color)
         {
             var splitLines = command.Length > maxCharactersPerLine ? SplitCommand(command, maxCharactersPerLine) : new[] { command };
             foreach (var line in splitLines)
             {
-                if (IsInBounds(position.Y))
+                if (IsInBounds(pos.Y))
                 {
-                    spriteBatch.DrawString(GameConsoleOptions.Options.Font, line, position, color);
+                    spriteBatch.DrawString(GameConsoleOptions.Options.Font, line, pos, color);
                 }
-                ValidateFirstCommandPosition(position.Y + GameConsoleOptions.Options.Font.LineSpacing);
-                position.Y += GameConsoleOptions.Options.Font.LineSpacing;
+                ValidateFirstCommandPosition(pos.Y + GameConsoleOptions.Options.Font.LineSpacing);
+                pos.Y += GameConsoleOptions.Options.Font.LineSpacing;
             }
-            return position;
+            return pos;
         }
 
         static IEnumerable<string> SplitCommand(string command, int max)
@@ -170,22 +170,22 @@ namespace XNAGameConsole
         /// Draws the specified collection of commands and returns the position of the next command to be drawn
         /// </summary>
         /// <param name="lines"></param>
-        /// <param name="position"></param>
+        /// <param name="pos"></param>
         /// <returns></returns>
-        Vector2 DrawCommands(IEnumerable<OutputLine> lines, Vector2 position)
+        Vector2 DrawCommands(IEnumerable<OutputLine> lines, Vector2 pos)
         {
-            var originalX = position.X;
+            var originalX = pos.X;
             foreach (var command in lines)
             {
                 if (command.Type == OutputLineType.Command)
                 {
-                    position = DrawPrompt(position);
+                    pos = DrawPrompt(pos);
                 }
                 //position.Y = DrawCommand(command.ToString(), position, GameConsoleOptions.Options.FontColor).Y;
-                position.Y = DrawCommand(command.ToString(), position, command.Type == OutputLineType.Command ? GameConsoleOptions.Options.PastCommandColor : GameConsoleOptions.Options.PastCommandOutputColor).Y;
-                position.X = originalX;
+                pos.Y = DrawCommand(command.ToString(), pos, command.Type == OutputLineType.Command ? GameConsoleOptions.Options.PastCommandColor : GameConsoleOptions.Options.PastCommandOutputColor).Y;
+                pos.X = originalX;
             }
-            return position;
+            return pos;
         }
 
         /// <summary>
@@ -193,31 +193,31 @@ namespace XNAGameConsole
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        Vector2 DrawPrompt(Vector2 position)
+        Vector2 DrawPrompt(Vector2 pos)
         {
-            spriteBatch.DrawString(GameConsoleOptions.Options.Font, GameConsoleOptions.Options.Prompt, position, GameConsoleOptions.Options.PromptColor);
-            position.X += oneCharacterWidth * GameConsoleOptions.Options.Prompt.Length + oneCharacterWidth;
-            return position;
+            spriteBatch.DrawString(GameConsoleOptions.Options.Font, GameConsoleOptions.Options.Prompt, pos, GameConsoleOptions.Options.PromptColor);
+            pos.X += oneCharacterWidth * GameConsoleOptions.Options.Prompt.Length + oneCharacterWidth;
+            return pos;
         }
 
         public void Open()
         {
-            if (CurrentState == State.Opening || CurrentState == State.Opened)
+            if (currentState == State.Opening || currentState == State.Opened)
             {
                 return;
             }
             stateChangeTime = DateTime.Now;
-            CurrentState = State.Opening;
+            currentState = State.Opening;
         }
 
         public void Close()
         {
-            if (CurrentState == State.Closing || CurrentState == State.Closed)
+            if (currentState == State.Closing || currentState == State.Closed)
             {
                 return;
             }
             stateChangeTime = DateTime.Now;
-            CurrentState = State.Closing;
+            currentState = State.Closing;
         }
 
         void ValidateFirstCommandPosition(float nextCommandY)
@@ -230,7 +230,7 @@ namespace XNAGameConsole
 
         bool IsInBounds(float yPosition)
         {
-            return yPosition < OpenedPosition.Y + GameConsoleOptions.Options.Height;
+            return yPosition < openedPosition.Y + GameConsoleOptions.Options.Height;
         }
     }
 }

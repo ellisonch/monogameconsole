@@ -23,7 +23,7 @@ namespace XNATextInput
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private GameConsole console;
-        public Player player;
+        private Player player;
 
         public Game1()
         {
@@ -95,7 +95,6 @@ namespace XNATextInput
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
             if (!console.Opened)
             {
                 player.Update(gameTime);
