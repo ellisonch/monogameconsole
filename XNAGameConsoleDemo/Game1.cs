@@ -48,13 +48,12 @@ namespace XNATextInput
                                                                        {
                                                                            Font = Content.Load<SpriteFont>("GameFont"),
                                                                            FontColor = Color.LawnGreen,
-                                                                           Prompt = ">>>",
+                                                                           Prompt = "~>",
                                                                            PromptColor = Color.Crimson,
                                                                            CursorColor = Color.OrangeRed,
-                                                                           BackgroundColor = new Color(Color.Black,200),
-                                                                           Height = 400,
-                                                                           Padding = 50,
+                                                                           BackgroundColor = new Color(Color.Black,150),
                                                                            PastCommandOutputColor = Color.Aqua,
+                                                                           BufferColor = Color.Gold
                                                                        });
             console.AddCommand("rotRad", a =>
                                              {
