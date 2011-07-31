@@ -68,7 +68,7 @@ namespace XNAGameConsole
             openedPosition = new Vector2(GameConsoleOptions.Options.Margin, 0);
             this.spriteBatch = spriteBatch;
             this.inputProcessor = inputProcessor;
-            pixel = new Texture2D(game.GraphicsDevice, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);
+            pixel = new Texture2D(game.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             pixel.SetData(new[] { Color.White });
             firstCommandPositionOffset = Vector2.Zero;
             oneCharacterWidth = GameConsoleOptions.Options.Font.MeasureString("x").X;
@@ -128,7 +128,7 @@ namespace XNAGameConsole
             var split = SplitCommand(inputProcessor.Buffer.ToString(), maxCharactersPerLine).Last();
             pos.X += GameConsoleOptions.Options.Font.MeasureString(split).X;
             pos.Y -= GameConsoleOptions.Options.Font.LineSpacing;
-            spriteBatch.DrawString(GameConsoleOptions.Options.Font, (int)(gameTime.TotalRealTime.TotalSeconds / GameConsoleOptions.Options.CursorBlinkSpeed) % 2 == 0 ? GameConsoleOptions.Options.Cursor.ToString() : "", pos, GameConsoleOptions.Options.CursorColor);
+            spriteBatch.DrawString(GameConsoleOptions.Options.Font, (int)(gameTime.TotalGameTime.TotalSeconds / GameConsoleOptions.Options.CursorBlinkSpeed) % 2 == 0 ? GameConsoleOptions.Options.Cursor.ToString() : "", pos, GameConsoleOptions.Options.CursorColor);
         }
 
         /// <summary>

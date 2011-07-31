@@ -1,9 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAGameConsole", "XNAGameConsole\XNAGameConsole.csproj", "{9FC39F64-284B-4D6B-B174-885F2D78BFBD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAGameConsoleDemo", "XNAGameConsoleDemo\XNAGameConsoleDemo.csproj", "{A1EB5E72-E1D5-4AFE-B2A8-47A915FC67CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAGameConsoleContent", "XNAGameConsole\Content\XNAGameConsoleContent.contentproj", "{6AC6A745-7002-4B3B-9D19-755B85998E91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XNAGameConsoleDemoContent", "XNAGameConsoleDemo\Content\XNAGameConsoleDemoContent.contentproj", "{027222D5-D1C3-4F5D-A4E3-5C1B18E6927B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,12 +19,12 @@ Global
 		{9FC39F64-284B-4D6B-B174-885F2D78BFBD}.Debug|x86.Build.0 = Debug|x86
 		{9FC39F64-284B-4D6B-B174-885F2D78BFBD}.Release|x86.ActiveCfg = Release|x86
 		{9FC39F64-284B-4D6B-B174-885F2D78BFBD}.Release|x86.Build.0 = Release|x86
-		{6AC6A745-7002-4B3B-9D19-755B85998E91}.Debug|x86.ActiveCfg = Debug|x86
-		{6AC6A745-7002-4B3B-9D19-755B85998E91}.Release|x86.ActiveCfg = Release|x86
 		{A1EB5E72-E1D5-4AFE-B2A8-47A915FC67CA}.Debug|x86.ActiveCfg = Debug|x86
 		{A1EB5E72-E1D5-4AFE-B2A8-47A915FC67CA}.Debug|x86.Build.0 = Debug|x86
 		{A1EB5E72-E1D5-4AFE-B2A8-47A915FC67CA}.Release|x86.ActiveCfg = Release|x86
 		{A1EB5E72-E1D5-4AFE-B2A8-47A915FC67CA}.Release|x86.Build.0 = Release|x86
+		{6AC6A745-7002-4B3B-9D19-755B85998E91}.Debug|x86.ActiveCfg = Debug|x86
+		{6AC6A745-7002-4B3B-9D19-755B85998E91}.Release|x86.ActiveCfg = Release|x86
 		{027222D5-D1C3-4F5D-A4E3-5C1B18E6927B}.Debug|x86.ActiveCfg = Debug|x86
 		{027222D5-D1C3-4F5D-A4E3-5C1B18E6927B}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection

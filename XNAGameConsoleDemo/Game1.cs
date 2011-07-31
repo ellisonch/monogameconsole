@@ -51,7 +51,7 @@ namespace XNATextInput
                                                                            Prompt = "~>",
                                                                            PromptColor = Color.Crimson,
                                                                            CursorColor = Color.OrangeRed,
-                                                                           BackgroundColor = new Color(Color.Black,150),
+                                                                           BackgroundColor = new Color(0, 0, 0, 150), //Color.BLACK with transparency
                                                                            PastCommandOutputColor = Color.Aqua,
                                                                            BufferColor = Color.Gold
                                                                        });
