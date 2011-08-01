@@ -104,7 +104,7 @@ namespace XNAGameConsole
 
         void EventInput_CharEntered(object sender, CharacterEventArgs e)
         {
-            if (isHandled)
+            if (isHandled || !isActive)
             {
                 isHandled = false;
                 return;
